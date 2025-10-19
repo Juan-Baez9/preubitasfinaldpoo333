@@ -17,21 +17,21 @@ import tiquetes.Transaccion;
 public class Organizador extends Usuario {
     private final String idOrganizador;
     private double finanzas;
-    private final List<Evento> eventos;
+    private Evento[] eventos;
     private final List<Tiquete> cortesias = new ArrayList<>();
 
+    
+    
+    
     public Organizador(String login, String password, String nombre, double saldo, String idOrganizador,
-            ArrayList<Evento> eventos) {
-        super(login, password, nombre, saldo);
-        this.idOrganizador = Objects.requireNonNull(idOrganizador, "El identificador del organizador es obligatorio");
-        this.eventos = new ArrayList<>();
-        if (eventos != null) {
-            this.eventos.addAll(eventos);
-        }
-    }
-    
-    
-    public List<Tiquete> getCortesias() {
+			Evento[] eventos) {
+		super(login, password, nombre, saldo);
+		this.idOrganizador = idOrganizador;
+		this.finanzas = finanzas;
+		this.eventos = eventos;
+	}
+
+	public List<Tiquete> getCortesias() {
         return new ArrayList<>(cortesias);
     }
     
@@ -59,18 +59,16 @@ public class Organizador extends Usuario {
         throw new UnsupportedOperationException("El identificador del organizador es inmutable");
     }
 
-    public ArrayList<Evento> getEventos() {
-        return new ArrayList<>(eventos);
-    }
+  
 
-    public void setEventos(ArrayList<Evento> eventos) {
-        this.eventos.clear();
-        if (eventos != null) {
-            this.eventos.addAll(eventos);
-        }
-    }
+    
+    
 
-    public Evento crearEvento(Administrador administrador, String idEvento, String nombre, LocalDate fecha, LocalTime hora,
+    public Evento[] getEventos() {
+		return eventos;
+	}
+
+	public Evento crearEvento(Administrador administrador, String idEvento, String nombre, LocalDate fecha, LocalTime hora,
             String estado, TipoEvento tipoEvento, Venue venue, Oferta oferta, Organizador organizador,
             ArrayList<Tiquete> tiquetes) {
         Objects.requireNonNull(administrador, "El administrador es obligatorio");
@@ -85,7 +83,7 @@ public class Organizador extends Usuario {
         }
         Evento evento = new Evento(administrador, idEvento, nombre, fecha, hora, estado, tipoEvento, venue, oferta,
                 organizador, tiquetes);
-        eventos.add(evento);
+        
         venue.registrarEvento(evento);
         return evento;
     }
@@ -124,4 +122,31 @@ public class Organizador extends Usuario {
         }
         return finanzas;
     }
-}
+    public void registrarEvento(Evento e) {
+        boolean registrado = false;
+
+        
+        for (int i = 0; i < eventos.length; i++) {
+            if (eventos[i] == null) {    
+                eventos[i] = e;          
+                registrado = true;       
+                break;                  
+            }
+        }
+
+        
+        if (!registrado) {
+            Evento[] nuevo = new Evento[eventos.length + 1]; 
+
+          
+            for (int i = 0; i < eventos.length; i++) {
+                nuevo[i] = eventos[i];
+            }
+
+            
+            nuevo[eventos.length] = e;
+
+            
+            eventos = nuevo;
+        }
+    }

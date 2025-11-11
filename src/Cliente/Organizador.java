@@ -30,10 +30,8 @@ import tiquetes.Transaccion;
 public class Organizador extends Usuario {
     private final String idOrganizador;
     private double finanzas;
-    private Evento[] eventos;
+    private final List<Evento> eventos;
     private final List<Tiquete> cortesias = new ArrayList<>();
-
-    
     
     /**
      * Crea un organizador con credenciales, saldo inicial, identificador y arreglo de eventos.
@@ -46,12 +44,24 @@ public class Organizador extends Usuario {
      * @param eventos        arreglo inicial de eventos (puede ser {@code null} o contener posiciones vacías).
      * @param finanzas 
      */
-    public Organizador(String login, String password, String nombre, double saldo, String idOrganizador,
-			Evento[] eventos ) {
+	public Organizador(String login, String password, String nombre, double saldo, String idOrganizador,
+			Evento[] eventos) {
+		this(login, password, nombre, saldo, idOrganizador, 0.0, eventos);
+	}
+
+	public Organizador(String login, String password, String nombre, double saldo, String idOrganizador,
+			double finanzasIniciales, Evento[] eventosIniciales) {
 		super(login, password, nombre, saldo);
-		this.idOrganizador = idOrganizador;
-		this.finanzas = finanzas;
-		this.eventos = eventos;
+		this.idOrganizador = Objects.requireNonNull(idOrganizador, "El identificador del organizador es obligatorio");
+		this.finanzas = finanzasIniciales;
+		this.eventos = new ArrayList<>();
+		if (eventosIniciales != null) {
+			for (Evento e : eventosIniciales) {
+				if (e != null) {
+					this.eventos.add(e);
+				}
+			}
+		}
 	}
 
 	public List<Tiquete> getCortesias() {
@@ -89,9 +99,10 @@ public class Organizador extends Usuario {
     public void setIdOrganizador(String idOrganizador) {
         throw new UnsupportedOperationException("El identificador del organizador es inmutable");
     }
-    public Evento[] getEventos() {
-		return eventos;
-	}
+    public List<Evento> getEventos() {
+        return new ArrayList<>(eventos);
+    }
+    
     
     /**
      * Crea un {@link eventos.Evento} asociado a un {@link eventos.Venue} aprobado por el administrador.
@@ -139,9 +150,9 @@ public class Organizador extends Usuario {
                 organizador, tiquetes);
         
         venue.registrarEvento(evento);
+        registrarEvento(evento);
         return evento;
     }
-
 	/**
 	 * Define y asigna localidades a un evento en un venue.
 	 * <p>
@@ -248,22 +259,8 @@ public class Organizador extends Usuario {
      * @param e evento a registrar (puede ser {@code null}, aunque no se sugiere en la práctica).
      */
     public void registrarEvento(Evento e) {
-        boolean registrado = false;
-
-        for (int i = 0; i < eventos.length; i++) {
-            if (eventos[i] == null) {    
-                eventos[i] = e;          
-                registrado = true;       
-                break;                  
-            }
-        }
-        if (!registrado) {
-            Evento[] nuevo = new Evento[eventos.length + 1]; 
-            for (int i = 0; i < eventos.length; i++) {
-                nuevo[i] = eventos[i];
-            }
-            nuevo[eventos.length] = e;
-            eventos = nuevo;
+    	if (e != null) {
+            eventos.add(e);
         }
     }
 }

@@ -13,14 +13,14 @@ public class ContraOferta {
     private final String id;
     private final Cliente comprador;
     private final double monto;
-    private estadoContraOferta estado;
+    private EstadoContraOferta estado;
     private final LocalDateTime fechaCreacion;
 
     public ContraOferta(Cliente comprador, double monto) {
-        this(UUID.randomUUID().toString(), comprador, monto, estadoContraOferta.PENDIENTE, LocalDateTime.now());
+        this(UUID.randomUUID().toString(), comprador, monto, EstadoContraOferta.PENDIENTE, LocalDateTime.now());
     }
 
-    public ContraOferta(String id, Cliente comprador, double monto, estadoContraOferta estado, LocalDateTime fechaCreacion) {
+    public ContraOferta(String id, Cliente comprador, double monto, EstadoContraOferta estado, LocalDateTime fechaCreacion) {
         this.id = Objects.requireNonNull(id, "El identificador es obligatorio");
         this.comprador = Objects.requireNonNull(comprador, "El comprador es obligatorio");
         this.monto = monto;
@@ -40,11 +40,11 @@ public class ContraOferta {
         return monto;
     }
 
-    public estadoContraOferta getEstado() {
+    public EstadoContraOferta getEstado() {
         return estado;
     }
 
-    public void setEstado(estadoContraOferta estado) {
+    public void setEstado(EstadoContraOferta estado) {
         this.estado = Objects.requireNonNull(estado);
     }
 

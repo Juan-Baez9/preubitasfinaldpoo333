@@ -54,6 +54,10 @@ public class Cliente extends Usuario {
         return new ArrayList<>(tiquetes);
     }
 
+    public List<Tiquete> verTiquetes() {
+        return new ArrayList<>(tiquetes);
+    }
+
     public void setTiquetes(ArrayList<Tiquete> tiquetesNuevos) {
         this.tiquetes.clear();
         if (tiquetesNuevos != null) {
@@ -103,29 +107,34 @@ public class Cliente extends Usuario {
      * @return {@code true} si la transferencia se realizó; {@code false} en caso contrario.
      */
     public boolean transferirTiquete(Cliente receptor, int idTiquete, String password) {
-    
-    if (receptor == null) {
-        return false;
-    }
-    
-    if (!this.getPassword().equals(password)) {
-        return false;
-    }
-    Tiquete tiqueteATransferir = null;
-    for (Tiquete t : this.getTiquetes()) {
-        if (t.getIdTiquete() == idTiquete) {
-            tiqueteATransferir = t;
-            break;
+        if (receptor == null) {
+            return false;
         }
+        if (!this.getPassword().equals(password)) {
+            return false;
+        }
+        Tiquete tiqueteATransferir = null;
+        for (Tiquete t : tiquetes) {
+            if (t.getIdTiquete() == idTiquete) {
+                tiqueteATransferir = t;
+                break;
+            }
+        }
+        if (tiqueteATransferir == null) {
+            return false;
+        }
+        tiquetes.remove(tiqueteATransferir);
+        receptor.agregarTiquete(tiqueteATransferir);
+        tiqueteATransferir.setCliente(receptor);
+        return true;
     }
-    if (tiqueteATransferir == null) {
-       
+
+    public boolean poseeTiquete(int idTiquete) {
+        for (Tiquete t : tiquetes) {
+            if (t.getIdTiquete() == idTiquete) {
+                return true;
+            }
+        }
         return false;
     }
-    this.getTiquetes().remove(tiqueteATransferir);
-    receptor.getTiquetes().add(tiqueteATransferir);
-    tiqueteATransferir.setCliente(receptor);
-
-    return true;
-}
 }

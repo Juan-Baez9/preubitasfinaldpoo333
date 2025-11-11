@@ -21,8 +21,14 @@ public class LogSistema {
      * @param tipo        categoría del evento (p. ej., "OFERTA", "CONTRAOFERTA").
      * @param descripcion descripción detallada del suceso.
      */
-    public void registrar(String tipo, String descripcion) {
-        entradas.add(new EntradaLog(LocalDateTime.now(), Objects.requireNonNull(tipo), Objects.requireNonNull(descripcion)));
+    
+    public EntradaLog registrar(String tipo, String descripcion) {
+        EntradaLog entrada = new EntradaLog(
+                LocalDateTime.now(),
+                Objects.requireNonNull(tipo, "El tipo es obligatorio"),
+                Objects.requireNonNull(descripcion, "La descripción es obligatoria"));
+        entradas.add(entrada);
+        return entrada;
     }
 
     /**
@@ -58,5 +64,14 @@ public class LogSistema {
         if (nuevas != null) {
             entradas.addAll(nuevas);
         }
+    }
+
+
+    /**
+     * Vacía por completo el log. Útil para restablecer el estado de la aplicación
+     * entre cargas de datos.
+     */
+    public void limpiar() {
+        entradas.clear();
     }
 }

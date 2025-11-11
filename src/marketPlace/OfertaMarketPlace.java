@@ -15,7 +15,7 @@ import java.util.UUID;
  * Oferta publicada por un cliente en el marketplace.
  */
 public class OfertaMarketPlace {
-    private final String id ;
+    private final String id;
     private final Cliente vendedor;
     private final List<Tiquete> tiquetes;
     private final double precioInicial;
@@ -23,14 +23,12 @@ public class OfertaMarketPlace {
     private final List<ContraOferta> contraofertas;
     private final LocalDateTime fechaCreacion;
 
-    public OfertaMarketPlace(Cliente vendedor, List<Tiquete> tiquetes, double precioInicial) 
-    {
+    public OfertaMarketPlace(Cliente vendedor, List<Tiquete> tiquetes, double precioInicial) {
         this(UUID.randomUUID().toString(), vendedor, tiquetes, precioInicial, EstadoOferta.ACTIVA, new ArrayList<>(), LocalDateTime.now());
     }
 
     public OfertaMarketPlace(String id, Cliente vendedor, List<Tiquete> tiquetes, double precioInicial,
-                             EstadoOferta estado, List<ContraOferta> contraofertas, LocalDateTime fechaCreacion) 
-    {
+                             EstadoOferta estado, List<ContraOferta> contraofertas, LocalDateTime fechaCreacion) {
         this.id = Objects.requireNonNull(id, "El identificador es obligatorio");
         this.vendedor = Objects.requireNonNull(vendedor, "El vendedor es obligatorio");
         this.tiquetes = new ArrayList<>(Objects.requireNonNull(tiquetes, "Los tiquetes son obligatorios"));

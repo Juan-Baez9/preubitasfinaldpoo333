@@ -1,147 +1,148 @@
 [
   {
-    "idEvento": "EV001",
-    "nombre": "Concierto Los Alpes",
     "fecha": "2025-12-25",
-    "hora": "20:00",
-    "estado": "PROGRAMADO",
-    "tipoEvento": "CONCIERTO",
-    "organizadorLogin": "org01",
-    "administradorLogin": "ronny",
-    "tiquetes": [101, 102, 103],
     "venue": {
-      "idVenue": "VEN001",
-      "nombre": "Teatro Los Alpes",
       "ubicacion": "Bogotá",
+      "idVenue": "VEN001",
       "capacidadMaxima": 2000,
+      "nombre": "Teatro Los Alpes",
       "localidades": [
         {
-          "nombre": "VIP",
+          "numeroAsientos": 100,
           "precioBase": 150000,
           "numerada": true,
-          "numeroAsientos": 100
+          "nombre": "VIP"
         },
         {
-          "nombre": "GENERAL",
+          "numeroAsientos": 500,
           "precioBase": 90000,
           "numerada": false,
-          "numeroAsientos": 500
+          "nombre": "GENERAL"
         }
       ]
     },
-    "oferta": {
-      "inicio": "2025-10-20",
-      "fin": "2025-10-29",
-      "porcentaje": 15
-    }
+    "estado": "PROGRAMADO",
+    "tipoEvento": "CONCIERTO",
+    "hora": "20:00",
+    "idEvento": "EV001",
+    "administradorLogin": "ronny",
+    "organizadorLogin": "org01",
+    "tiquetes": [
+      101,
+      102,
+      103
+    ],
+    "nombre": "Concierto Los Alpes"
   },
   {
-     "idEvento": "EV002",
-     "nombre": "Festival Andino",
-     "fecha": "2025-08-18",
-     "hora": "16:30",
-     "estado": "PROGRAMADO",
-     "tipoEvento": "CULTURAL",
-     "organizadorLogin": "org02",
-     "administradorLogin": "ronny",
-     "tiquetes": [201, 202, 203, 204],
-     "venue": {
-       "idVenue": "VEN002",
-       "nombre": "Parque Central",
-       "ubicacion": "Medellín",
-       "capacidadMaxima": 5000,
-       "localidades": [
-         {
-           "nombre": "PLATEA",
-           "precioBase": 110000,
-           "numerada": false,
-           "numeroAsientos": 0
-         },
-         {
-           "nombre": "GRADERIA",
-           "precioBase": 65000,
-           "numerada": false,
-           "numeroAsientos": 0
-         }
-       ]
-     },
-     "oferta": {
-       "inicio": "2025-07-01",
-       "fin": "2025-07-15",
-       "porcentaje": 10
-     }
-   },
-     {
-       "idEvento": "EV003",
-       "nombre": "Obra Teatro del Sol",
-       "fecha": "2025-06-02",
-       "hora": "19:00",
-       "estado": "PROGRAMADO",
-       "tipoEvento": "CULTURAL",
-       "organizadorLogin": "org03",
-       "administradorLogin": "ronny",
-       "tiquetes": [301, 302],
-       "venue": {
-         "idVenue": "VEN003",
-         "nombre": "Teatro del Sol",
-         "ubicacion": "Cali",
-         "capacidadMaxima": 800,
-         "localidades": [
-           {
-             "nombre": "PALCOS",
-             "precioBase": 180000,
-             "numerada": true,
-             "numeroAsientos": 50
-           },
-           {
-             "nombre": "PLATEA",
-             "precioBase": 95000,
-             "numerada": true,
-             "numeroAsientos": 200
-           }
-         ]
-       }
-     },
-     {
-       "idEvento": "EV004",
-       "nombre": "Final Liga Capital",
-       "fecha": "2025-11-30",
-       "hora": "18:45",
-       "estado": "PROGRAMADO",
-       "tipoEvento": "DEPORTIVO",
-       "organizadorLogin": "org02",
-       "administradorLogin": "ronny",
-       "tiquetes": [401, 402, 403],
-       "venue": {
-         "idVenue": "VEN004",
-         "nombre": "Estadio Capital",
-         "ubicacion": "Bogotá",
-         "capacidadMaxima": 35000,
-         "localidades": [
-           {
-             "nombre": "ORIENTAL",
-             "precioBase": 120000,
-             "numerada": false,
-             "numeroAsientos": 0
-           },
-           {
-             "nombre": "OCCIDENTAL",
-             "precioBase": 160000,
-             "numerada": false,
-             "numeroAsientos": 0
-           },
-           {
-             "nombre": "NORTE",
-             "precioBase": 80000,
-             "numerada": false,
-             "numeroAsientos": 0
-           }
-         ]
-       },
-       "oferta": {
-         "inicio": "2025-09-01",
-         "fin": "2025-09-10",
-         "porcentaje": 12
-       }
-     }
-   ]
+    "fecha": "2025-08-18",
+    "venue": {
+      "ubicacion": "Medellín",
+      "idVenue": "VEN002",
+      "capacidadMaxima": 5000,
+      "nombre": "Parque Central",
+      "localidades": [
+        {
+          "numeroAsientos": 0,
+          "precioBase": 110000,
+          "numerada": false,
+          "nombre": "PLATEA"
+        },
+        {
+          "numeroAsientos": 0,
+          "precioBase": 65000,
+          "numerada": false,
+          "nombre": "GRADERIA"
+        }
+      ]
+    },
+    "estado": "PROGRAMADO",
+    "tipoEvento": "CULTURAL",
+    "hora": "16:30",
+    "idEvento": "EV002",
+    "administradorLogin": "ronny",
+    "organizadorLogin": "org02",
+    "tiquetes": [
+      201,
+      202,
+      203,
+      204
+    ],
+    "nombre": "Festival Andino"
+  },
+  {
+    "fecha": "2025-06-02",
+    "venue": {
+      "ubicacion": "Cali",
+      "idVenue": "VEN003",
+      "capacidadMaxima": 800,
+      "nombre": "Teatro del Sol",
+      "localidades": [
+        {
+          "numeroAsientos": 50,
+          "precioBase": 180000,
+          "numerada": true,
+          "nombre": "PALCOS"
+        },
+        {
+          "numeroAsientos": 200,
+          "precioBase": 95000,
+          "numerada": true,
+          "nombre": "PLATEA"
+        }
+      ]
+    },
+    "estado": "PROGRAMADO",
+    "tipoEvento": "CULTURAL",
+    "hora": "19:00",
+    "idEvento": "EV003",
+    "administradorLogin": "ronny",
+    "organizadorLogin": "org03",
+    "tiquetes": [
+      301,
+      302
+    ],
+    "nombre": "Obra Teatro del Sol"
+  },
+  {
+    "fecha": "2025-11-30",
+    "venue": {
+      "ubicacion": "Bogotá",
+      "idVenue": "VEN004",
+      "capacidadMaxima": 35000,
+      "nombre": "Estadio Capital",
+      "localidades": [
+        {
+          "numeroAsientos": 0,
+          "precioBase": 120000,
+          "numerada": false,
+          "nombre": "ORIENTAL"
+        },
+        {
+          "numeroAsientos": 0,
+          "precioBase": 160000,
+          "numerada": false,
+          "nombre": "OCCIDENTAL"
+        },
+        {
+          "numeroAsientos": 0,
+          "precioBase": 80000,
+          "numerada": false,
+          "nombre": "NORTE"
+        }
+      ]
+    },
+    "estado": "PROGRAMADO",
+    "tipoEvento": "DEPORTIVO",
+    "hora": "18:45",
+    "idEvento": "EV004",
+    "administradorLogin": "ronny",
+    "organizadorLogin": "org02",
+    "tiquetes": [
+      401,
+      402,
+      403
+    ],
+    "nombre": "Final Liga Capital"
+  }
+]

@@ -1,59 +1,77 @@
 [
   {
-    "id": "OFER-100",
-    "vendedorLogin": "cli01",
-    "precioInicial": 220000,
-    "estado": "ACTIVA",
-    "fechaCreacion": "2024-05-20T10:15:00",
-    "tiquetes": [101],
     "contraofertas": [
       {
-        "id": "CO-200",
-        "compradorLogin": "cli04",
+        "estado": "PENDIENTE",
         "monto": 205000,
-        "estado": "PENDIENTE",
-        "fechaCreacion": "2024-05-21T09:10:00"
+        "fechaCreacion": "2024-05-21T09:10",
+        "id": "CO-200",
+        "compradorLogin": "cli04"
       },
       {
-        "id": "CO-201",
-        "compradorLogin": "cli05",
-        "monto": 198000,
         "estado": "RECHAZADA",
-        "fechaCreacion": "2024-05-21T11:20:00"
+        "monto": 198000,
+        "fechaCreacion": "2024-05-21T11:20",
+        "id": "CO-201",
+        "compradorLogin": "cli05"
       }
-    ]
+    ],
+    "estado": "ACTIVA",
+    "vendedorLogin": "cli01",
+    "fechaCreacion": "2024-05-20T10:15",
+    "precioInicial": 220000,
+    "id": "OFER-100",
+    "tiquetes": [101]
   },
   {
-    "id": "OFER-101",
-    "vendedorLogin": "cli02",
-    "precioInicial": 250000,
-    "estado": "ACTIVA",
-    "fechaCreacion": "2024-05-18T14:45:00",
-    "tiquetes": [102, 201],
     "contraofertas": [
       {
-        "id": "CO-210",
-        "compradorLogin": "cli03",
-        "monto": 230000,
         "estado": "PENDIENTE",
-        "fechaCreacion": "2024-05-19T12:05:00"
+        "monto": 230000,
+        "fechaCreacion": "2024-05-19T12:05",
+        "id": "CO-210",
+        "compradorLogin": "cli03"
       },
       {
-        "id": "CO-211",
-        "compradorLogin": "cli01",
-        "monto": 240000,
         "estado": "ACEPTADA",
-        "fechaCreacion": "2024-05-19T15:40:00"
+        "monto": 240000,
+        "fechaCreacion": "2024-05-19T15:40",
+        "id": "CO-211",
+        "compradorLogin": "cli01"
       }
+    ],
+    "estado": "ACTIVA",
+    "vendedorLogin": "cli02",
+    "fechaCreacion": "2024-05-18T14:45",
+    "precioInicial": 250000,
+    "id": "OFER-101",
+    "tiquetes": [
+      102,
+      201
     ]
   },
   {
-    "id": "OFER-102",
-    "vendedorLogin": "cli04",
-    "precioInicial": 125000,
+    "contraofertas": [],
     "estado": "CANCELADA_VENDEDOR",
-    "fechaCreacion": "2024-05-10T09:30:00",
-    "tiquetes": [202],
-    "contraofertas": []
+    "vendedorLogin": "cli04",
+    "fechaCreacion": "2024-05-10T09:30",
+    "precioInicial": 125000,
+    "id": "OFER-102",
+    "tiquetes": [202]
+  },
+  {
+    "contraofertas": [{
+      "estado": "ACEPTADA",
+      "monto": 1,
+      "fechaCreacion": "2025-11-12T11:39:52.473373600",
+      "id": "c28c57d4-5146-4ec4-8fb1-8008228a716d",
+      "compradorLogin": "cli05"
+    }],
+    "estado": "VENDIDA",
+    "vendedorLogin": "cli01",
+    "fechaCreacion": "2025-11-12T11:36:55.992405200",
+    "precioInicial": 5585999,
+    "id": "9cbad846-18ed-4e90-9880-c2744e09b942",
+    "tiquetes": [402]
   }
 ]

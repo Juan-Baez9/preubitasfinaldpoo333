@@ -1,6 +1,7 @@
 package manager;
 
 import Cliente.Administrador;
+import java.util.function.Supplier;
 import Cliente.Cliente;
 import Cliente.Organizador;
 import eventos.Evento;
@@ -112,31 +113,31 @@ public class BoletaMasterSystem {
     }
 
     public OfertaMarketPlace publicarOferta(Cliente vendedor, List<Integer> tiquetesIds, double precioInicial) {
-        return marketplace().publicarOferta(vendedor, tiquetesIds, precioInicial);
+    	 return ejecutarYGuardar(() -> marketplace().publicarOferta(vendedor, tiquetesIds, precioInicial));
     }
 
     public void cancelarOfertaPorVendedor(Cliente vendedor, String ofertaId) {
-        marketplace().cancelarOfertaPorVendedor(vendedor, ofertaId);
+    	ejecutarYGuardar(() -> marketplace().cancelarOfertaPorVendedor(vendedor, ofertaId));
     }
 
     public void cancelarOfertaPorAdministrador(Administrador admin, String ofertaId) {
-        marketplace().cancelarOfertaPorAdministrador(admin, ofertaId);
+    	 ejecutarYGuardar(() -> marketplace().cancelarOfertaPorAdministrador(admin, ofertaId));
     }
 
     public ContraOferta crearContraoferta(Cliente comprador, String ofertaId, double monto) {
-        return marketplace().crearContraoferta(comprador, ofertaId, monto);
+        return ejecutarYGuardar(() -> marketplace().crearContraoferta(comprador, ofertaId, monto));
     }
 
     public void rechazarContraoferta(Cliente vendedor, String ofertaId, String contraofertaId) {
-        marketplace().rechazarContraoferta(vendedor, ofertaId, contraofertaId);
+    	ejecutarYGuardar(() -> marketplace().rechazarContraoferta(vendedor, ofertaId, contraofertaId));
     }
 
     public void aceptarContraoferta(Cliente vendedor, String ofertaId, String contraofertaId) {
-        marketplace().aceptarContraoferta(vendedor, ofertaId, contraofertaId);
+    	ejecutarYGuardar(() -> marketplace().aceptarContraoferta(vendedor, ofertaId, contraofertaId));
     }
 
     public void comprarOferta(Cliente comprador, String ofertaId) {
-        marketplace().comprarOferta(comprador, ofertaId);
+    	ejecutarYGuardar(() -> marketplace().comprarOferta(comprador, ofertaId));
     }
 
     public LogSistema getLogSistema() {
@@ -162,5 +163,15 @@ public class BoletaMasterSystem {
             throw new IllegalStateException("Debe cargar los datos del sistema primero");
         }
         return state;
+    }
+    private void ejecutarYGuardar(Runnable accion) {
+        Objects.requireNonNull(accion, "accion").run();
+        guardarDatos();
+    }
+
+    private <T> T ejecutarYGuardar(Supplier<T> accion) {
+        T resultado = Objects.requireNonNull(accion, "accion").get();
+        guardarDatos();
+        return resultado;
     }
 }

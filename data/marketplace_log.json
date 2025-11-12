@@ -1,22 +1,42 @@
 [
   {
-    "fechaHora": "2024-05-20T10:15:00",
+    "descripcion": "cli01 publicó la oferta OFER-100 con el tiquete 101",
     "tipo": "OFERTA_CREADA",
-    "descripcion": "cli01 publicó la oferta OFER-100 con el tiquete 101"
+    "fechaHora": "2024-05-20T10:15"
   },
   {
-    "fechaHora": "2024-05-21T09:10:00",
+    "descripcion": "cli04 ofreció 205000 por la oferta OFER-100",
     "tipo": "CONTRAOFERTA_RECIBIDA",
-    "descripcion": "cli04 ofreció 205000 por la oferta OFER-100"
+    "fechaHora": "2024-05-21T09:10"
   },
   {
-    "fechaHora": "2024-05-19T15:40:00",
+    "descripcion": "cli02 aceptó la contraoferta CO-211 de cli01 en la oferta OFER-101",
     "tipo": "CONTRAOFERTA_ACEPTADA",
-    "descripcion": "cli02 aceptó la contraoferta CO-211 de cli01 en la oferta OFER-101"
+    "fechaHora": "2024-05-19T15:40"
   },
   {
-    "fechaHora": "2024-05-10T10:00:00",
+    "descripcion": "cli04 canceló la oferta OFER-102",
     "tipo": "OFERTA_CANCELADA",
-    "descripcion": "cli04 canceló la oferta OFER-102"
+    "fechaHora": "2024-05-10T10:00"
+  },
+  {
+    "descripcion": "cli01 publicó la oferta 9cbad846-18ed-4e90-9880-c2744e09b942 por 5585999,00",
+    "tipo": "OFERTA",
+    "fechaHora": "2025-11-12T11:36:55.994401800"
+  },
+  {
+    "descripcion": "cli05 propuso 1,00 sobre la oferta 9cbad846-18ed-4e90-9880-c2744e09b942",
+    "tipo": "CONTRAOFERTA",
+    "fechaHora": "2025-11-12T11:39:52.473373600"
+  },
+  {
+    "descripcion": "cli01 aceptó la contraoferta c28c57d4-5146-4ec4-8fb1-8008228a716d de cli05",
+    "tipo": "CONTRAOFERTA",
+    "fechaHora": "2025-11-12T11:43:05.352228500"
+  },
+  {
+    "descripcion": "Venta concretada por 1,00 entre cli01 y cli05 (oferta 9cbad846-18ed-4e90-9880-c2744e09b942)",
+    "tipo": "TRANSACCION",
+    "fechaHora": "2025-11-12T11:43:05.352228500"
   }
 ]

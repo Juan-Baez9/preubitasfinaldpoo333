@@ -24,6 +24,15 @@
     "tiquetes": [101]
   },
   {
+    "contraofertas": [],
+    "estado": "VENDIDA",
+    "vendedorLogin": "cli01",
+    "fechaCreacion": "2025-11-12T12:07:50.273407700",
+    "precioInicial": 204,
+    "id": "f0083e82-e3ea-4b4f-a221-972e33e23b15",
+    "tiquetes": [204]
+  },
+  {
     "contraofertas": [
       {
         "estado": "PENDIENTE",
@@ -73,5 +82,14 @@
     "precioInicial": 5585999,
     "id": "9cbad846-18ed-4e90-9880-c2744e09b942",
     "tiquetes": [402]
+  },
+  {
+    "contraofertas": [],
+    "estado": "VENDIDA",
+    "vendedorLogin": "cli04",
+    "fechaCreacion": "2025-11-12T12:15:47.290219100",
+    "precioInicial": 204,
+    "id": "d01d4e45-9225-4b43-ad1d-e3f5863734c2",
+    "tiquetes": [202]
   }
 ]

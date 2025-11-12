@@ -23,8 +23,8 @@
       "login": "cli05",
       "tiquetes": [
         401,
-        203,
-        402
+        402,
+        203
       ],
       "nombre": "Sofía Deportista"
     },
@@ -34,7 +34,7 @@
       "saldo": 520000,
       "login": "cli04",
       "tiquetes": [
-        202,
+        204,
         302
       ],
       "nombre": "Laura Impro"
@@ -46,7 +46,7 @@
       "login": "cli01",
       "tiquetes": [
         101,
-        204
+        202
       ],
       "nombre": "Pedro Cliente"
     },

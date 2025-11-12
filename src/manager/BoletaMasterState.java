@@ -21,7 +21,7 @@ import org.json.JSONArray;
  * Se encarga únicamente de almacenar el estado, delegando la lógica a servicios
  * especializados.
  */
-final class BoletaMasterState {
+public final class BoletaMasterState {
 
     private Administrador administrador;
     private final Map<String, Cliente> clientesPorLogin = new HashMap<>();
@@ -34,51 +34,51 @@ final class BoletaMasterState {
     private final LogSistema logSistema = new LogSistema();
     private JSONArray paquetesRaw = new JSONArray();
 
-    Administrador getAdministrador() {
+    public Administrador getAdministrador() {
         return administrador;
     }
 
-    void setAdministrador(Administrador administrador) {
+    public void setAdministrador(Administrador administrador) {
         this.administrador = administrador;
     }
 
-    Map<String, Cliente> getClientesPorLogin() {
+    public Map<String, Cliente> getClientesPorLogin() {
         return clientesPorLogin;
     }
 
-    Map<String, Organizador> getOrganizadoresPorLogin() {
+    public Map<String, Organizador> getOrganizadoresPorLogin() {
         return organizadoresPorLogin;
     }
 
-    Map<String, Evento> getEventosPorId() {
+    public Map<String, Evento> getEventosPorId() {
         return eventosPorId;
     }
 
-    Map<Integer, Tiquete> getTiquetesPorId() {
+    public Map<Integer, Tiquete> getTiquetesPorId() {
         return tiquetesPorId;
     }
 
-    Map<String, OfertaMarketPlace> getOfertasPorId() {
+    public Map<String, OfertaMarketPlace> getOfertasPorId() {
         return ofertasPorId;
     }
 
-    Map<Integer, String> getTiqueteEnOferta() {
+    public Map<Integer, String> getTiqueteEnOferta() {
         return tiqueteEnOferta;
     }
 
-    Set<Integer> getTiquetesDeluxe() {
+    public Set<Integer> getTiquetesDeluxe() {
         return tiquetesDeluxe;
     }
 
-    LogSistema getLogSistema() {
+    public LogSistema getLogSistema() {
         return logSistema;
     }
 
-    JSONArray getPaquetesRaw() {
+    public JSONArray getPaquetesRaw() {
         return paquetesRaw;
     }
 
-    void setPaquetesRaw(JSONArray paquetesRaw) {
+    public void setPaquetesRaw(JSONArray paquetesRaw) {
         this.paquetesRaw = paquetesRaw;
     }
 

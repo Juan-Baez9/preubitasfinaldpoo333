@@ -21,37 +21,37 @@ import java.util.stream.Collectors;
 /**
  * Encapsula toda la lógica del marketplace de reventa.
  */
-final class MarketplaceService {
+public class MarketplaceService {
 
     private final BoletaMasterState state;
     private final LogSistema logSistema;
 
-    MarketplaceService(BoletaMasterState state) {
+    public MarketplaceService(BoletaMasterState state) {
         this.state = Objects.requireNonNull(state, "state");
         this.logSistema = state.getLogSistema();
     }
 
-    List<OfertaMarketPlace> obtenerOfertasActivas() {
+    public List<OfertaMarketPlace> obtenerOfertasActivas() {
         return state.getOfertasPorId().values().stream()
                 .filter(o -> o.getEstado() == EstadoOferta.ACTIVA)
                 .collect(Collectors.toList());
     }
 
-    List<OfertaMarketPlace> obtenerOfertasPorVendedor(Cliente vendedor) {
+    public List<OfertaMarketPlace> obtenerOfertasPorVendedor(Cliente vendedor) {
         return state.getOfertasPorId().values().stream()
                 .filter(o -> o.getVendedor().equals(vendedor))
                 .collect(Collectors.toList());
     }
 
-    List<OfertaMarketPlace> obtenerTodasLasOfertas() {
+    public List<OfertaMarketPlace> obtenerTodasLasOfertas() {
         return new ArrayList<>(state.getOfertasPorId().values());
     }
 
-    Optional<OfertaMarketPlace> buscarOferta(String ofertaId) {
+    public Optional<OfertaMarketPlace> buscarOferta(String ofertaId) {
         return Optional.ofNullable(state.getOfertasPorId().get(ofertaId));
     }
 
-    Map<OfertaMarketPlace, List<ContraOferta>> contraofertasPendientes(Cliente vendedor) {
+    public Map<OfertaMarketPlace, List<ContraOferta>> contraofertasPendientes(Cliente vendedor) {
         Map<OfertaMarketPlace, List<ContraOferta>> result = new LinkedHashMap<>();
         for (OfertaMarketPlace oferta : obtenerOfertasPorVendedor(vendedor)) {
             List<ContraOferta> pendientes = oferta.getContraofertas().stream()
@@ -64,7 +64,7 @@ final class MarketplaceService {
         return result;
     }
 
-    synchronized OfertaMarketPlace publicarOferta(Cliente vendedor, List<Integer> tiquetesIds, double precioInicial) {
+   public synchronized OfertaMarketPlace publicarOferta(Cliente vendedor, List<Integer> tiquetesIds, double precioInicial) {
         if (vendedor == null) {
             throw new IllegalArgumentException("Se requiere un vendedor");
         }
@@ -104,7 +104,7 @@ final class MarketplaceService {
         return oferta;
     }
 
-    synchronized void cancelarOfertaPorVendedor(Cliente vendedor, String ofertaId) {
+    public synchronized void cancelarOfertaPorVendedor(Cliente vendedor, String ofertaId) {
         OfertaMarketPlace oferta = validarOfertaDeVendedor(vendedor, ofertaId);
         if (oferta.getEstado() != EstadoOferta.ACTIVA) {
             throw new IllegalStateException("La oferta no está activa");
@@ -115,7 +115,7 @@ final class MarketplaceService {
                 vendedor.getLogin(), oferta.getId()));
     }
 
-    synchronized void cancelarOfertaPorAdministrador(Administrador admin, String ofertaId) {
+    public synchronized void cancelarOfertaPorAdministrador(Administrador admin, String ofertaId) {
         Administrador administrador = state.getAdministrador();
         if (administrador == null || admin == null || !administrador.equals(admin)) {
             throw new SecurityException("Administrador no autorizado");
@@ -134,7 +134,7 @@ final class MarketplaceService {
                 oferta.getId(), oferta.getVendedor().getLogin()));
     }
 
-    synchronized ContraOferta crearContraoferta(Cliente comprador, String ofertaId, double monto) {
+    public synchronized ContraOferta crearContraoferta(Cliente comprador, String ofertaId, double monto) {
         OfertaMarketPlace oferta = state.getOfertasPorId().get(ofertaId);
         if (comprador == null) {
             throw new IllegalArgumentException("Se requiere un comprador");
@@ -160,7 +160,7 @@ final class MarketplaceService {
         return contra;
     }
 
-    synchronized void rechazarContraoferta(Cliente vendedor, String ofertaId, String contraofertaId) {
+    public synchronized void rechazarContraoferta(Cliente vendedor, String ofertaId, String contraofertaId) {
         OfertaMarketPlace oferta = validarOfertaDeVendedor(vendedor, ofertaId);
         ContraOferta contra = oferta.buscarContraoferta(contraofertaId)
                 .orElseThrow(() -> new IllegalArgumentException("No existe la contraoferta"));
@@ -172,7 +172,7 @@ final class MarketplaceService {
                 vendedor.getLogin(), contra.getId(), contra.getComprador().getLogin()));
     }
 
-    synchronized void aceptarContraoferta(Cliente vendedor, String ofertaId, String contraofertaId) {
+    public synchronized void aceptarContraoferta(Cliente vendedor, String ofertaId, String contraofertaId) {
         OfertaMarketPlace oferta = validarOfertaDeVendedor(vendedor, ofertaId);
         if (oferta.getEstado() != EstadoOferta.ACTIVA) {
             throw new IllegalStateException("La oferta no está activa");
@@ -196,7 +196,7 @@ final class MarketplaceService {
                 monto, vendedor.getLogin(), comprador.getLogin(), oferta.getId()));
     }
 
-    synchronized void comprarOferta(Cliente comprador, String ofertaId) {
+    public synchronized void comprarOferta(Cliente comprador, String ofertaId) {
         OfertaMarketPlace oferta = state.getOfertasPorId().get(ofertaId);
         if (oferta == null) {
             throw new IllegalArgumentException("No existe la oferta");

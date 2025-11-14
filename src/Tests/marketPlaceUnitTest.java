@@ -61,7 +61,7 @@ class marketPlaceUnitTest {
     }
 
     @Test
-    void publicarOferta_rechazaTiqueteQueNoPerteneceAlVendedor() {
+    void publicarOfertaRechazaTiqueteQueNoPerteneceAlVendedor() {
         TiqueteBasico ajeno = new TiqueteBasico(comprador, 9202, 85_000.0, 4_000.0, 1_000.0,
                 "EMITIDO", tiqueteVendedor.getLocalidad(), tiqueteVendedor.getEvento(), 13, true);
         state.getTiquetesPorId().put(ajeno.getIdTiquete(), ajeno);
@@ -73,7 +73,7 @@ class marketPlaceUnitTest {
     }
 
     @Test
-    void publicarOferta_noPermiteReusarTiqueteEnOtraOferta() {
+    void excepcionTiqueteEnDosOfertas() {
         OfertaMarketPlace oferta = service.publicarOferta(vendedor, List.of(tiqueteVendedor.getIdTiquete()), 120_000.0);
 
         assertEquals(oferta.getId(), state.getTiqueteEnOferta().get(tiqueteVendedor.getIdTiquete()));
@@ -84,7 +84,7 @@ class marketPlaceUnitTest {
     }
 
     @Test
-    void crearContraoferta_noPermiteDelPropioVendedor() {
+    void excepcionContraOfertaPropioVendedor() {
         OfertaMarketPlace oferta = service.publicarOferta(vendedor, List.of(tiqueteVendedor.getIdTiquete()), 110_000.0);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
@@ -94,7 +94,7 @@ class marketPlaceUnitTest {
     }
 
     @Test
-    void aceptarContraoferta_actualizaSaldoEstadoYLimpiaMapa() {
+    void aceptarContraoferta() {
         OfertaMarketPlace oferta = service.publicarOferta(vendedor, List.of(tiqueteVendedor.getIdTiquete()), 110_000.0);
         ContraOferta contra = service.crearContraoferta(comprador, oferta.getId(), 100_000.0);
         double saldoVendedorInicial = vendedor.getSaldo();

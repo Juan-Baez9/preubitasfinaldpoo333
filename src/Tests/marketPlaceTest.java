@@ -77,7 +77,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void publicarOferta_creaRegistroActivoYEscribeLog() {
+    void publicarOfertaRegistro() {
         int logPrevio = sistema.getLogSistema().getEntradas().size();
         Cliente vendedor = sistema.autenticarCliente("cli03", "cli03").orElseThrow();
         assertFalse(sistema.obtenerOfertasPorVendedor(vendedor).stream()
@@ -98,7 +98,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void crearYAceptarContraoferta_transfiereTiqueteActualizaSaldosYLog() {
+    void crearYAceptarContraofertaActualizacion() {
         OfertaMarketPlace oferta = sistema.buscarOferta("OFER-100").orElseThrow();
         Cliente comprador = sistema.autenticarCliente("cli03", "cli03").orElseThrow();
         double saldoVendedorInicial = vendedorPrincipal.getSaldo();
@@ -126,7 +126,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void cancelarOfertaPorVendedor_cambiaEstadoYLiberarTiquete() {
+    void cancelarOfertaPorVendedorCambiarEstadoTiquete() {
         OfertaMarketPlace oferta = sistema.buscarOferta("OFER-101").orElseThrow();
         Cliente vendedor = sistema.autenticarCliente("cli02", "cli02").orElseThrow();
         int logPrevio = sistema.getLogSistema().getEntradas().size();
@@ -143,7 +143,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void comprarOfertaDirecta_transfiereSaldoPropiedadYRegistraLog() {
+    void comprarOfertaDirectaTransSaldo() {
         OfertaMarketPlace oferta = sistema.buscarOferta("OFER-101").orElseThrow();
         Cliente comprador = sistema.autenticarCliente("cli04", "cli04").orElseThrow();
         double saldoVendedorInicial = oferta.getVendedor().getSaldo();
@@ -164,7 +164,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void obtenerOfertasActivas_devuelveSoloOfertasEnEstadoActivo() {
+    void obtenerOfertasActivas() {
         List<OfertaMarketPlace> activas = sistema.obtenerOfertasActivas();
 
         assertFalse(activas.isEmpty(), "Debe haber ofertas activas de ejemplo");
@@ -174,7 +174,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void publicarOferta_rechazaTiquetesDeluxe() {
+    void publicarOfertaNoDeluxe() {
         Cliente vendedor = sistema.autenticarCliente("cli04", "cli04").orElseThrow();
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
@@ -186,7 +186,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void crearContraoferta_conSaldoInsuficienteFalla() {
+    void excepcionContraOfertaSinSaldo() {
         OfertaMarketPlace oferta = sistema.buscarOferta("OFER-101").orElseThrow();
         Cliente comprador = sistema.autenticarCliente("cli03", "cli03").orElseThrow();
 
@@ -198,7 +198,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void rechazarContraoferta_actualizaEstadoYRegistraLog() {
+    void rechazarContraofertaActualizarEstado() {
         OfertaMarketPlace oferta = sistema.buscarOferta("OFER-100").orElseThrow();
         int logPrevio = sistema.getLogSistema().getEntradas().size();
 
@@ -212,7 +212,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void contraofertasPendientes_devuelveSoloLasPendientesDelVendedor() {
+    void contraofertasPendientesVendedor() {
         Map<OfertaMarketPlace, List<ContraOferta>> pendientes = sistema.contraofertasPendientes(vendedorPrincipal);
 
         assertEquals(1, pendientes.size());
@@ -222,7 +222,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void obtenerOfertasPorVendedor_incluyeSoloPropias() {
+    void obtenerOfertasPorVendedor() {
         Cliente vendedorSecundario = sistema.autenticarCliente("cli02", "cli02").orElseThrow();
 
         List<OfertaMarketPlace> ofertasVendedor = sistema.obtenerOfertasPorVendedor(vendedorSecundario);
@@ -232,7 +232,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void comprarOferta_conSaldoInsuficienteNoModificaEstado() {
+    void excepcionComprarOfertaSaldoInsuficiente() {
         OfertaMarketPlace oferta = sistema.buscarOferta("OFER-101").orElseThrow();
         Cliente comprador = sistema.autenticarCliente("cli03", "cli03").orElseThrow();
         double saldoInicial = comprador.getSaldo();
@@ -244,7 +244,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void cancelarOfertaPorAdministrador_cambiaEstadoYRegistraLog() {
+    void cancelarOfertaPorAdministrador() {
         Administrador admin = sistema.getAdministrador();
         OfertaMarketPlace oferta = sistema.buscarOferta("OFER-100").orElseThrow();
         int logPrevio = sistema.getLogSistema().getEntradas().size();
@@ -258,7 +258,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void consultarLog_conCredencialesValidasDevuelveEntradas() {
+    void consultarLogValido() {
         Administrador admin = sistema.getAdministrador();
 
         Set<Integer> tiquetesEnOferta = new HashSet<>();
@@ -281,7 +281,7 @@ public class marketPlaceTest {
     }
 
     @Test
-    void consultarLog_conCredencialesInvalidasRechazaAcceso() {
+    void exepcionConsultarLogCredencialInvalida() {
         Administrador admin = sistema.getAdministrador();
 
         assertThrows(SecurityException.class,

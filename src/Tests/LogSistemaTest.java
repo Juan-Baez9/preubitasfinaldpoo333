@@ -28,7 +28,7 @@ class LogSistemaTest {
     }
 
     @Test
-    void registrar_agregaEntradaInmutable() {
+    void registrarAgregaEntradaInmutable() {
         EntradaLog entrada = logSistema.registrar("OFERTA", "cli01 publicó oferta");
 
         assertNotNull(entrada.getFechaHora());
@@ -40,7 +40,7 @@ class LogSistemaTest {
     }
 
     @Test
-    void consultar_conCredencialesValidasEntregaCopia() {
+    void consultarConCredencialesValidasEntregaCopia() {
         logSistema.registrar("CONTRAOFERTA", "cli02 propuso 120000");
 
         List<EntradaLog> entradas = logSistema.consultar(administrador, "admin", "admin");
@@ -50,13 +50,13 @@ class LogSistemaTest {
     }
 
     @Test
-    void consultar_conCredencialesInvalidasRechazaAcceso() {
+    void excepcionConsultaCredencialesInbalidas() {
         assertThrows(SecurityException.class, () -> logSistema.consultar(administrador, "admin", "otra"));
         assertThrows(SecurityException.class, () -> logSistema.consultar(null, "admin", "admin"));
     }
 
     @Test
-    void reemplazarEntradas_sustituyeContenido() {
+    void reemplazarEntradas() {
         List<EntradaLog> preexistentes = new ArrayList<>();
         preexistentes.add(new EntradaLog(java.time.LocalDateTime.now(), "TRANSACCION", "venta previa"));
 

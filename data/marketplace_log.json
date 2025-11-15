@@ -58,5 +58,30 @@
     "descripcion": "Compra directa por 204,00 entre cli01 y cli04 (oferta d01d4e45-9225-4b43-ad1d-e3f5863734c2)",
     "tipo": "TRANSACCION",
     "fechaHora": "2025-11-12T12:17:04.890792700"
+  },
+  {
+    "descripcion": "cli02 publicó la oferta 2bfd4679-ad16-4e3f-ad94-ebc5594e98fe por 9999,00",
+    "tipo": "OFERTA",
+    "fechaHora": "2025-11-14T16:52:29.996179800"
+  },
+  {
+    "descripcion": "Compra directa por 9999,00 entre cli01 y cli02 (oferta 2bfd4679-ad16-4e3f-ad94-ebc5594e98fe)",
+    "tipo": "TRANSACCION",
+    "fechaHora": "2025-11-14T16:53:37.972846500"
+  },
+  {
+    "descripcion": "cli01 publicó la oferta 9f56ce4d-c95a-4850-ab91-47a0e57ad074 por 52,00",
+    "tipo": "OFERTA",
+    "fechaHora": "2025-11-14T17:08:54.295328400"
+  },
+  {
+    "descripcion": "Compra directa por 52,00 entre cli05 y cli01 (oferta 9f56ce4d-c95a-4850-ab91-47a0e57ad074)",
+    "tipo": "TRANSACCION",
+    "fechaHora": "2025-11-14T17:09:25.795679500"
+  },
+  {
+    "descripcion": "cli05 publicó la oferta 5acf7208-2f45-444a-a059-556ad341b0df por 2555,00",
+    "tipo": "OFERTA",
+    "fechaHora": "2025-11-14T17:11:47.539112700"
   }
 ]

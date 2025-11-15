@@ -34,7 +34,7 @@
     "cargoServicio": 3500,
     "localidadNumerada": false,
     "idTiquete": 403,
-    "propietarioLogin": "cli02",
+    "propietarioLogin": "cli01",
     "idLocalidad": "VEN004::NORTE",
     "cargoEmision": 2500
   },
@@ -99,7 +99,7 @@
     "cargoServicio": 4000,
     "localidadNumerada": false,
     "idTiquete": 202,
-    "propietarioLogin": "cli01",
+    "propietarioLogin": "cli05",
     "idLocalidad": "VEN002::PLATEA",
     "cargoEmision": 1500
   },

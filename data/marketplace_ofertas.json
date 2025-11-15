@@ -69,6 +69,24 @@
     "tiquetes": [202]
   },
   {
+    "contraofertas": [],
+    "estado": "VENDIDA",
+    "vendedorLogin": "cli01",
+    "fechaCreacion": "2025-11-14T17:08:54.295328400",
+    "precioInicial": 52,
+    "id": "9f56ce4d-c95a-4850-ab91-47a0e57ad074",
+    "tiquetes": [202]
+  },
+  {
+    "contraofertas": [],
+    "estado": "VENDIDA",
+    "vendedorLogin": "cli02",
+    "fechaCreacion": "2025-11-14T16:52:29.995182500",
+    "precioInicial": 9999,
+    "id": "2bfd4679-ad16-4e3f-ad94-ebc5594e98fe",
+    "tiquetes": [403]
+  },
+  {
     "contraofertas": [{
       "estado": "ACEPTADA",
       "monto": 1,
@@ -90,6 +108,15 @@
     "fechaCreacion": "2025-11-12T12:15:47.290219100",
     "precioInicial": 204,
     "id": "d01d4e45-9225-4b43-ad1d-e3f5863734c2",
+    "tiquetes": [202]
+  },
+  {
+    "contraofertas": [],
+    "estado": "ACTIVA",
+    "vendedorLogin": "cli05",
+    "fechaCreacion": "2025-11-14T17:11:47.539112700",
+    "precioInicial": 2555,
+    "id": "5acf7208-2f45-444a-a059-556ad341b0df",
     "tiquetes": [202]
   }
 ]

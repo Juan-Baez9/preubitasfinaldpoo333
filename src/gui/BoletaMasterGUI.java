@@ -119,7 +119,7 @@ public class BoletaMasterGUI extends JFrame {
     private JPanel crearPanelCliente() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
+        panel.setBackground(new Color(236, 242, 250));
         JLabel titulo = new JLabel("Panel de cliente", SwingConstants.LEFT);
         titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 18f));
         panel.add(titulo, BorderLayout.NORTH);
@@ -135,6 +135,7 @@ public class BoletaMasterGUI extends JFrame {
 
     private JPanel crearTabTiquetes() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBackground(new Color(236, 242, 250));
         tiqueteModel = new DefaultListModel<>();
         JList<Tiquete> lista = new JList<>(tiqueteModel);
         lista.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
@@ -162,7 +163,7 @@ public class BoletaMasterGUI extends JFrame {
         detalleTiquete.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.add(detalleTiquete, BorderLayout.CENTER);
 
-        imprimirBtn = new JButton("Imprimir boleta");
+        imprimirBtn = new JButton("Ver / Imprimir boleta");
         imprimirBtn.addActionListener(e -> {
             Tiquete seleccionado = lista.getSelectedValue();
             if (seleccionado != null) {
@@ -175,6 +176,7 @@ public class BoletaMasterGUI extends JFrame {
 
     private JPanel crearTabMarketplace() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBackground(new Color(236, 242, 250));
         ofertasActivasModel = new DefaultListModel<>();
         JList<OfertaMarketPlace> lista = new JList<>(ofertasActivasModel);
         lista.setCellRenderer((l, v, i, s, f) -> {
@@ -226,6 +228,7 @@ public class BoletaMasterGUI extends JFrame {
 
     private JPanel crearTabMisOfertas() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBackground(new Color(236, 242, 250));
         misOfertasModel = new DefaultListModel<>();
         JList<OfertaMarketPlace> listaOfertas = new JList<>(misOfertasModel);
         listaOfertas.setCellRenderer((l, v, i, s, f) -> new JLabel(v.getId() + " - Estado: " + v.getEstado() + " - $" + v.getPrecioInicial()));
@@ -287,6 +290,7 @@ public class BoletaMasterGUI extends JFrame {
 
     private JPanel crearTabPublicar() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBackground(new Color(236, 242, 250));
         listaPublicables = new JList<>(new DefaultListModel<>());
         listaPublicables.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         panel.add(new JScrollPane(listaPublicables), BorderLayout.CENTER);

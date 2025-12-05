@@ -1,6 +1,8 @@
 package tiquetes;
 
 import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 import Cliente.Cliente;
@@ -21,7 +23,7 @@ import eventos.Localidad;
  * Proporciona utilidades comunes como el cálculo del valor total a pagar.
  */
 public abstract class Tiquete {
-    private int idTiquete;
+	private int idTiquete;
     private double precio;
     private double cargoServicio;
     private double cargoEmision;
@@ -29,7 +31,8 @@ public abstract class Tiquete {
     private Localidad localidad;
     private Evento evento;
     private Cliente cliente;
-    private String fechaImpresion;
+    private boolean impreso;
+    private LocalDateTime fechaImpresion;
     /**
      * Construye un tiquete con sus datos de contexto y valores económicos.
      *
@@ -55,6 +58,7 @@ public abstract class Tiquete {
         this.localidad = localidad;
         this.evento = Objects.requireNonNull(evento, "El evento es obligatorio");
         this.impreso = false;
+        this.fechaImpresion = null;
     }
 
 
@@ -143,11 +147,11 @@ public abstract class Tiquete {
         this.cliente = cliente;
     }
 
-    public String getFechaImpresion() {
+    public LocalDateTime getFechaImpresion() {
         return fechaImpresion;
     }
 
-    public void setFechaImpresion(String fechaImpresion) {
+    public void setFechaImpresion(LocalDateTime fechaImpresion) {
         this.fechaImpresion = fechaImpresion;
     }
     /**

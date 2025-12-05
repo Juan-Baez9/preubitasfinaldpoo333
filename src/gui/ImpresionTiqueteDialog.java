@@ -29,26 +29,36 @@ public class ImpresionTiqueteDialog extends JDialog {
     }
 
     private void initUI() {
-        setSize(900, 500);
+    	setSize(980, 540);
         setLocationRelativeTo(getOwner());
         setLayout(new BorderLayout(10, 10));
-        getContentPane().setBackground(new Color(240, 246, 252));
+        Color azulNoche = new Color(12, 27, 58);
+        getContentPane().setBackground(azulNoche);
 
-        JPanel main = new JPanel(new BorderLayout());
-        main.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel main = new JPanel(new BorderLayout(12, 12));
+        main.setBorder(BorderFactory.createEmptyBorder(14, 14, 14, 14));
+        main.setBackground(azulNoche);
         add(main, BorderLayout.CENTER);
 
         JLabel banner = new JLabel("Boleta lista para impresión", SwingConstants.CENTER);
-        banner.setFont(banner.getFont().deriveFont(Font.BOLD, 18f));
-        banner.setForeground(new Color(0, 70, 110));
+        banner.setFont(banner.getFont().deriveFont(Font.BOLD, 20f));
+        banner.setForeground(new Color(230, 238, 255));
+        banner.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+    
         add(banner, BorderLayout.NORTH);
+        
+        JLabel tituloEvento = new JLabel(tiquete.getEvento() != null ? tiquete.getEvento().getNombre() : "Evento", SwingConstants.CENTER);
+        tituloEvento.setForeground(new Color(240, 240, 245));
+        tituloEvento.setFont(tituloEvento.getFont().deriveFont(Font.BOLD, 22f));
+        tituloEvento.setBorder(BorderFactory.createEmptyBorder(0, 8, 8, 8));
+        add(tituloEvento, BorderLayout.SOUTH);
 
         JLabel imagenEvento = new JLabel();
         imagenEvento.setHorizontalAlignment(SwingConstants.CENTER);
         imagenEvento.setVerticalAlignment(SwingConstants.CENTER);
         imagenEvento.setOpaque(true);
-        imagenEvento.setBackground(new Color(223, 234, 245));
-        imagenEvento.setBorder(BorderFactory.createLineBorder(new Color(180, 200, 220)));
+        imagenEvento.setBackground(new Color(22, 42, 82));
+        imagenEvento.setBorder(BorderFactory.createLineBorder(new Color(80, 110, 150), 2));
         ImageIcon img = ImagenEventoFactory.crearImagenEvento(
                 tiquete.getEvento() != null ? tiquete.getEvento().getNombre() : "Evento",
                 420, 260);
@@ -58,25 +68,37 @@ public class ImpresionTiqueteDialog extends JDialog {
         JPanel lateralTexto = new JPanel();
         lateralTexto.setLayout(new BoxLayout(lateralTexto, BoxLayout.Y_AXIS));
         lateralTexto.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        lateralTexto.setBackground(new Color(250, 252, 255));
+        lateralTexto.setBackground(new Color(18, 42, 84));
         infoLabel.setVerticalAlignment(SwingConstants.TOP);
         infoLabel.setText(construirTexto());
+        infoLabel.setForeground(new Color(232, 238, 247));
         lateralTexto.add(infoLabel);
+        lateralTexto.add(Box.createVerticalStrut(8));
+        JLabel logo = new JLabel("BoletaMaster", SwingConstants.CENTER);
+        logo.setForeground(new Color(247, 204, 64));
+        logo.setFont(logo.getFont().deriveFont(Font.BOLD, 18f));
+        logo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lateralTexto.add(logo);
         main.add(lateralTexto, BorderLayout.WEST);
 
         JPanel lateralQr = new JPanel(new BorderLayout());
         lateralQr.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        lateralQr.setBackground(new Color(250, 252, 255));
+        lateralQr.setBackground(new Color(18, 42, 84));
         qrLabel.setHorizontalAlignment(SwingConstants.CENTER);
         qrLabel.setVerticalAlignment(SwingConstants.CENTER);
-        qrLabel.setBorder(BorderFactory.createLineBorder(new Color(200, 210, 220)));
+        qrLabel.setOpaque(true);
+        qrLabel.setBackground(new Color(12, 27, 58));
+        qrLabel.setBorder(BorderFactory.createLineBorder(new Color(247, 204, 64), 2));
         lateralQr.add(qrLabel, BorderLayout.CENTER);
         main.add(lateralQr, BorderLayout.EAST);
 
         JButton imprimirBtn = new JButton("Imprimir");
         imprimirBtn.addActionListener(e -> procesarImpresion(imprimirBtn));
         imprimirBtn.setEnabled(!tiquete.isImpreso());
-        add(imprimirBtn, BorderLayout.SOUTH);
+        imprimirBtn.setBackground(new Color(247, 204, 64));
+        imprimirBtn.setForeground(new Color(20, 30, 48));
+        imprimirBtn.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
+        add(imprimirBtn, BorderLayout.WEST);
 
         if (tiquete.isImpreso()) {
             mostrarQr(construirContenidoQr(fechaImpresion));
@@ -90,7 +112,7 @@ public class ImpresionTiqueteDialog extends JDialog {
         String fechaEvento = tiquete.getEvento() != null && tiquete.getEvento().getFecha() != null
                 ? fmtFecha.format(tiquete.getEvento().getFecha()) : "N/D";
         String fechaImp = tiquete.isImpreso() && fechaImpresion != null ? fmtImp.format(fechaImpresion) : "Pendiente";
-        StringBuilder sb = new StringBuilder("<html><h2 style='color:#0c4b75'>BoletaMaster</h2>");
+        StringBuilder sb = new StringBuilder("<html><h2 style='color:#f7cc40'>Datos del tiquete</h2>");
         sb.append("<p><b>Evento:</b> ").append(evento).append("</p>");
         sb.append("<p><b>ID Tiquete:</b> ").append(tiquete.getIdTiquete()).append("</p>");
         sb.append("<p><b>Fecha evento:</b> ").append(fechaEvento).append("</p>");
@@ -119,7 +141,7 @@ public class ImpresionTiqueteDialog extends JDialog {
 
     private String construirContenidoQr(LocalDateTime fecha) {
         String fechaEvento = tiquete.getEvento() != null && tiquete.getEvento().getFecha() != null
-                ? tiquete.getEvento().getFecha().toString() : "N/D";
+        		  ? tiquete.getEvento().getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/D";
         return String.format("Evento:%s\nID:%d\nF.Evento:%s\nF.Expedición:%s",
                 tiquete.getEvento() != null ? tiquete.getEvento().getNombre() : "(sin evento)",
                 tiquete.getIdTiquete(),

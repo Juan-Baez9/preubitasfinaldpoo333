@@ -283,6 +283,10 @@ final class JsonDataStore {
                 propietario.agregarTiquete(tiquete);
                 tiquete.setCliente(propietario);
             }
+            tiquete.setImpreso(t.optBoolean("impreso", false));
+            if (t.has("fechaImpresion") && !t.isNull("fechaImpresion")) {
+                tiquete.setFechaImpresion(LocalDateTime.parse(t.getString("fechaImpresion")));
+            }
             if (localidad != null) {
                 localidad.agregarTiquete(tiquete);
             }
@@ -528,6 +532,8 @@ final class JsonDataStore {
             t.put("tipo", tiquete instanceof TiqueteBasico ? "BASICO" : "OTRO");
             t.put("eventoId", tiquete.getEvento() == null ? JSONObject.NULL : tiquete.getEvento().getIdEvento());
             t.put("propietarioLogin", tiquete.getCliente() == null ? JSONObject.NULL : tiquete.getCliente().getLogin());
+            t.put("impreso", tiquete.isImpreso());
+            t.put("fechaImpresion", tiquete.getFechaImpresion() == null ? JSONObject.NULL : tiquete.getFechaImpresion().toString());
             if (tiquete instanceof TiqueteBasico tb) {
                 t.put("numeroAsiento", tb.getNumeroAsiento() == null ? JSONObject.NULL : tb.getNumeroAsiento());
                 t.put("localidadNumerada", tb.isLocalidadNumerada());

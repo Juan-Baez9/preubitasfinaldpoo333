@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BoletaMaster | Mis tiquetes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">BoletaMaster</p>
+      <h1>Revisa tus tiquetes con estilo</h1>
+      <p class="hero__lead">Inicia sesión, visualiza tus eventos y muestra el código QR desde un panel moderno.</p>
+      <div class="hero__badges">
+        <span class="pill">QR listo para escanear</span>
+        <span class="pill pill--light">Personaliza la imagen del evento</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="panel panel--narrow">
+      <div class="panel__header">
+        <div>
+          <p class="panel__eyebrow">Acceso seguro</p>
+          <h2>Inicia sesión</h2>
+          <p class="panel__sub">Usa tu login y contraseña de cliente para ver tus tiquetes.</p>
+        </div>
+        <div class="panel__hint">Tip: prueba con <strong>cli01</strong>/<strong>cli01</strong> o cualquier cliente de <code>data/usuarios.json</code>.</div>
+      </div>
+
+      <form id="login-form" class="form">
+        <div class="form__group">
+          <label for="login">Login</label>
+          <input id="login" name="login" autocomplete="username" required placeholder="ej: cli01">
+        </div>
+        <div class="form__group">
+          <label for="password">Contraseña</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••">
+        </div>
+        <div class="form__footer">
+          <button type="submit" class="btn btn--primary">Entrar</button>
+          <p id="login-error" class="form__error" role="alert"></p>
+        </div>
+      </form>
+    </section>
+
+    <section id="ticket-section" class="panel hidden">
+      <div class="panel__header">
+        <div>
+          <p class="panel__eyebrow">Tus tiquetes</p>
+          <h2 id="ticket-title"></h2>
+          <p class="panel__sub">Muestra el QR en la entrada, verifica precios y actualiza la imagen de cada evento.</p>
+        </div>
+        <div class="panel__filters" id="ticket-stats"></div>
+      </div>
+
+      <div id="ticket-grid" class="ticket-grid"></div>
+    </section>
+  </main>
+
+  <template id="ticket-card-template">
+    <article class="ticket-card">
+      <div class="ticket-card__image-wrap">
+        <img class="ticket-card__image" alt="Imagen del evento">
+        <div class="ticket-card__tag"></div>
+      </div>
+      <div class="ticket-card__body">
+        <header class="ticket-card__header">
+          <div>
+            <p class="ticket-card__eyebrow"></p>
+            <h3 class="ticket-card__title"></h3>
+            <p class="ticket-card__meta"></p>
+          </div>
+          <div class="ticket-card__price"></div>
+        </header>
+        <dl class="ticket-card__details"></dl>
+        <div class="ticket-card__qr">
+          <div class="qr"></div>
+          <div class="qr__caption">Escanea para validar</div>
+        </div>
+        <form class="image-form">
+          <label>Personaliza la imagen del evento</label>
+          <div class="image-form__controls">
+            <input type="url" name="image" placeholder="Pega una URL de imagen" aria-label="URL de la imagen del evento">
+            <button type="submit" class="btn btn--ghost">Actualizar</button>
+          </div>
+          <p class="image-form__hint">Se guarda localmente en tu navegador.</p>
+        </form>
+      </div>
+    </article>
+  </template>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-J3eZ3g2Fp8z0vJLRi8tzkGhtnJUU8Xn2TB6tiqBmZkUT4hIwrKyYVJZZzKzbwQ6vurIWBLL8GMDJ9C+M7f3s0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="app.js"></script>
+</body>
+</html>

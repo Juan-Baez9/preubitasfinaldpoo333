@@ -2,6 +2,7 @@ package tiquetes;
 
 import java.util.Objects;
 
+
 import Cliente.Cliente;
 import eventos.Evento;
 import eventos.Localidad;
@@ -25,10 +26,10 @@ public abstract class Tiquete {
     private double cargoServicio;
     private double cargoEmision;
     private String estado;
-    private boolean impreso;
     private Localidad localidad;
     private Evento evento;
     private Cliente cliente;
+    private String fechaImpresion;
     /**
      * Construye un tiquete con sus datos de contexto y valores económicos.
      *
@@ -140,6 +141,14 @@ public abstract class Tiquete {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public String getFechaImpresion() {
+        return fechaImpresion;
+    }
+
+    public void setFechaImpresion(String fechaImpresion) {
+        this.fechaImpresion = fechaImpresion;
     }
     /**
      * Calcula el valor total del tiquete como suma del precio base,

@@ -31,6 +31,13 @@ public class BoletaMasterSystem {
     private final JsonDataStore dataStore;
     private BoletaMasterState state;
     private MarketplaceService marketplaceService;
+    /**
+     * Marca de compatibilidad para integrar flujos de impresión/etiquetado desde la GUI.
+     * No participa en la lógica del dominio, pero evita errores de compilación
+     * cuando la capa gráfica consulta o ajusta esta bandera.
+     */
+    private boolean fetchImpression;
+
 
     public BoletaMasterSystem(Path usuariosPath,
                               Path eventosPath,
@@ -71,6 +78,13 @@ public class BoletaMasterSystem {
             return Optional.of(administrador);
         }
         return Optional.empty();
+    }
+    public boolean getFetchImpression() {
+        return fetchImpression;
+    }
+
+    public void setFetchImpression(boolean fetchImpression) {
+        this.fetchImpression = fetchImpression;
     }
 
     public Optional<Cliente> autenticarCliente(String login, String password) {

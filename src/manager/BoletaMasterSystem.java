@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 /**
  * Fachada principal del sistema BoletaMaster.
@@ -150,6 +151,15 @@ public class BoletaMasterSystem {
         }
         return organizador.getEventos();
     }
+    
+    public void marcarTiqueteImpreso(Tiquete tiquete, LocalDateTime fechaImpresion) {
+        ejecutarYGuardar(() -> {
+            tiquete.setFechaImpresion(fechaImpresion);
+            tiquete.marcarImpreso();
+        });
+    }
+
+
 
     private MarketplaceService marketplace() {
         if (marketplaceService == null) {

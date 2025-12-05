@@ -86,6 +86,9 @@ public class MarketplaceService {
             if (!Objects.equals(tiquete.getCliente(), vendedor)) {
                 throw new IllegalArgumentException("El tiquete " + id + " no pertenece al vendedor");
             }
+            if (tiquete.isImpreso()) {
+                throw new IllegalArgumentException("El tiquete " + id + " ya fue impreso y no puede publicarse en el marketplace");
+            }
             if (deluxe.contains(id)) {
                 throw new IllegalArgumentException("El tiquete " + id + " pertenece a un paquete Deluxe y no puede revenderse");
             }
@@ -182,6 +185,7 @@ public class MarketplaceService {
         if (contra.getEstado() != EstadoContraOferta.PENDIENTE) {
             throw new IllegalStateException("La contraoferta ya fue gestionada");
         }
+        validarTiquetesNoImpresos(oferta);
         Cliente comprador = contra.getComprador();
         double monto = contra.getMonto();
         comprador.usarSaldo(monto);
@@ -207,6 +211,7 @@ public class MarketplaceService {
         if (oferta.getVendedor().equals(comprador)) {
             throw new IllegalArgumentException("No puede comprar su propia oferta");
         }
+        validarTiquetesNoImpresos(oferta);
         double monto = oferta.getPrecioInicial();
         comprador.usarSaldo(monto);
         Cliente vendedor = oferta.getVendedor();
@@ -221,6 +226,9 @@ public class MarketplaceService {
     private void transferirTiquetes(OfertaMarketPlace oferta, Cliente nuevoPropietario) {
         Map<Integer, String> tiqueteEnOferta = state.getTiqueteEnOferta();
         for (Tiquete tiquete : oferta.getTiquetes()) {
+        	if (tiquete.isImpreso()) {
+                throw new IllegalStateException("El tiquete " + tiquete.getIdTiquete() + " ya fue impreso y no puede transferirse");
+            }
             Cliente antiguo = tiquete.getCliente();
             if (antiguo != null) {
                 antiguo.eliminarTiquete(tiquete);
@@ -228,6 +236,14 @@ public class MarketplaceService {
             nuevoPropietario.agregarTiquete(tiquete);
             tiquete.setCliente(nuevoPropietario);
             tiqueteEnOferta.remove(tiquete.getIdTiquete());
+        }
+    }
+    
+    private void validarTiquetesNoImpresos(OfertaMarketPlace oferta) {
+        for (Tiquete tiquete : oferta.getTiquetes()) {
+            if (tiquete.isImpreso()) {
+                throw new IllegalStateException("El tiquete " + tiquete.getIdTiquete() + " ya fue impreso y no puede venderse");
+            }
         }
     }
 

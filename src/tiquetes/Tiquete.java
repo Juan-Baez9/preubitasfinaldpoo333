@@ -25,6 +25,7 @@ public abstract class Tiquete {
     private double cargoServicio;
     private double cargoEmision;
     private String estado;
+    private boolean impreso;
     private Localidad localidad;
     private Evento evento;
     private Cliente cliente;
@@ -52,7 +53,9 @@ public abstract class Tiquete {
         this.estado = Objects.requireNonNull(estado, "El estado es obligatorio");
         this.localidad = localidad;
         this.evento = Objects.requireNonNull(evento, "El evento es obligatorio");
+        this.impreso = false;
     }
+
 
     public int getIdTiquete() {
         return idTiquete;
@@ -101,6 +104,18 @@ public abstract class Tiquete {
 
     public void setEstado(String estado) {
         this.estado = Objects.requireNonNull(estado, "El estado es obligatorio");
+    }
+
+    public boolean isImpreso() {
+        return impreso;
+    }
+
+    public void setImpreso(boolean impreso) {
+        this.impreso = impreso;
+    }
+
+    public void marcarImpreso() {
+        this.impreso = true;
     }
 
     public Localidad getLocalidad() {

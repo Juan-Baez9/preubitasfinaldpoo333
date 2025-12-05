@@ -123,6 +123,9 @@ public class Cliente extends Usuario {
         if (tiqueteATransferir == null) {
             return false;
         }
+        if (tiqueteATransferir.isImpreso()) {
+            throw new IllegalStateException("El tiquete ya fue impreso y no puede transferirse");
+        }
         tiquetes.remove(tiqueteATransferir);
         receptor.agregarTiquete(tiqueteATransferir);
         tiqueteATransferir.setCliente(receptor);

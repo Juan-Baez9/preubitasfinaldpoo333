@@ -9,8 +9,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class ImpresionTiqueteDialog extends JDialog {
+	
+	private static final int QR_ESCALA = 10;
+    private static final int QR_BORDE = 8;
 
     private final Tiquete tiquete;
     private final BoletaMasterSystem sistema;
@@ -81,14 +86,19 @@ public class ImpresionTiqueteDialog extends JDialog {
         lateralTexto.add(logo);
         main.add(lateralTexto, BorderLayout.WEST);
 
+        
         JPanel lateralQr = new JPanel(new BorderLayout());
         lateralQr.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         lateralQr.setBackground(new Color(18, 42, 84));
         qrLabel.setHorizontalAlignment(SwingConstants.CENTER);
         qrLabel.setVerticalAlignment(SwingConstants.CENTER);
         qrLabel.setOpaque(true);
+        qrLabel.setPreferredSize(new Dimension(240, 240));
+        qrLabel.setText("Imprime para generar QR");
+        qrLabel.setForeground(new Color(200, 210, 230));
         qrLabel.setBackground(new Color(12, 27, 58));
         qrLabel.setBorder(BorderFactory.createLineBorder(new Color(247, 204, 64), 2));
+        qrLabel.setPreferredSize(new Dimension(340, 340));
         lateralQr.add(qrLabel, BorderLayout.CENTER);
         main.add(lateralQr, BorderLayout.EAST);
 
@@ -141,37 +151,47 @@ public class ImpresionTiqueteDialog extends JDialog {
     }
 
     private String construirContenidoQr(LocalDateTime fecha) {
+        DateTimeFormatter fmtEvento = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter fmtImp = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         String fechaEvento = tiquete.getEvento() != null && tiquete.getEvento().getFecha() != null
-        		  ? tiquete.getEvento().getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/D";
-        return String.format("Evento:%s\nID:%d\nF.Evento:%s\nF.Expedición:%s",
-                tiquete.getEvento() != null ? tiquete.getEvento().getNombre() : "(sin evento)",
-                tiquete.getIdTiquete(),
-                fechaEvento,
-                fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
-        );
+        		  ? tiquete.getEvento().getFecha().format(fmtEvento) : "N/D";
+        String evento = tiquete.getEvento() != null ? tiquete.getEvento().getNombre() : "(sin evento)";
+        String query = String.format("evento=%s&id=%s&fechaEvento=%s&fechaExpedicion=%s",
+                URLEncoder.encode(evento, StandardCharsets.UTF_8),
+                URLEncoder.encode(String.valueOf(tiquete.getIdTiquete()), StandardCharsets.UTF_8),
+                URLEncoder.encode(fechaEvento, StandardCharsets.UTF_8),
+                URLEncoder.encode(fecha.format(fmtImp), StandardCharsets.UTF_8));
+        // El contenido se codifica como una URL completa para que la cámara del teléfono lo detecte
+        // inmediatamente como enlace. La propia URL incluye todos los datos del tiquete como parámetros
+        // de consulta legibles.
+        return "https://boletamaster.app/ticket?" + query;
     }
 
     private boolean mostrarQr(String contenido) {
         try {
-            QrCode qr = QrCode.encodeText(contenido, QrCode.Ecc.MEDIUM);
-            int escala = 6;
-            int borde = 4;
-            int tamano = (qr.size + borde * 2) * escala;
+        	 QrCode qr = QrCode.encodeText(contenido, QrCode.Ecc.HIGH);
+             int tamano = (qr.size + QR_BORDE * 2) * QR_ESCALA;
             BufferedImage img = new BufferedImage(tamano, tamano, BufferedImage.TYPE_INT_RGB);
             Graphics2D g = img.createGraphics();
+            
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
             g.setColor(Color.WHITE);
             g.fillRect(0, 0, tamano, tamano);
             g.setColor(Color.BLACK);
             for (int y = 0; y < qr.size; y++) {
                 for (int x = 0; x < qr.size; x++) {
                     if (qr.getModule(x, y)) {
-                        g.fillRect((x + borde) * escala, (y + borde) * escala, escala, escala);
+                    	g.fillRect((x + QR_BORDE) * QR_ESCALA, (y + QR_BORDE) * QR_ESCALA, QR_ESCALA, QR_ESCALA);
                     }
                 }
             }
             g.dispose();
+            ImageIcon icon = new ImageIcon(img);
             qrLabel.setText(null);
-            qrLabel.setIcon(new ImageIcon(img));
+            qrLabel.setIcon(icon);
+            qrLabel.setPreferredSize(new Dimension(icon.getIconWidth() + 16, icon.getIconHeight() + 16));
+            qrLabel.revalidate();
             return true;
         } catch (Exception ex) {
             qrLabel.setText("QR no disponible");

@@ -39,9 +39,9 @@
     "propietarioLogin": "cli01",
     "idLocalidad": "VEN004::NORTE",
     "precio": 80000,
-    "impreso": false,
+    "impreso": true,
     "localidadNumerada": false,
-    "fechaImpresion": "2025-12-05T19:54:22.914689500",
+    "fechaImpresion": "2025-12-06T11:09:31.818233600",
     "cargoEmision": 2500
   },
   {
@@ -54,9 +54,9 @@
     "propietarioLogin": "cli01",
     "idLocalidad": "VEN001::VIP",
     "precio": 120000,
-    "impreso": false,
+    "impreso": true,
     "localidadNumerada": true,
-    "fechaImpresion": null,
+    "fechaImpresion": "2025-12-06T10:35:03.353720200",
     "cargoEmision": 2000
   },
   {

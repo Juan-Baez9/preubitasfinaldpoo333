@@ -14,8 +14,8 @@ import java.nio.charset.StandardCharsets;
 
 public class ImpresionTiqueteDialog extends JDialog {
 	
-	private static final int QR_ESCALA = 10;
-    private static final int QR_BORDE = 8;
+	private static final int QR_ESCALA = 12;
+    private static final int QR_BORDE = 12;
 
     private final Tiquete tiquete;
     private final BoletaMasterSystem sistema;
@@ -93,12 +93,12 @@ public class ImpresionTiqueteDialog extends JDialog {
         qrLabel.setHorizontalAlignment(SwingConstants.CENTER);
         qrLabel.setVerticalAlignment(SwingConstants.CENTER);
         qrLabel.setOpaque(true);
-        qrLabel.setPreferredSize(new Dimension(240, 240));
-        qrLabel.setText("Imprime para generar QR");
-        qrLabel.setForeground(new Color(200, 210, 230));
-        qrLabel.setBackground(new Color(12, 27, 58));
-        qrLabel.setBorder(BorderFactory.createLineBorder(new Color(247, 204, 64), 2));
-        qrLabel.setPreferredSize(new Dimension(340, 340));
+        qrLabel.setBackground(Color.WHITE);
+        qrLabel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(247, 204, 64), 2),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        qrLabel.setPreferredSize(new Dimension(420, 420));
+        qrLabel.setMinimumSize(new Dimension(360, 360));
         lateralQr.add(qrLabel, BorderLayout.CENTER);
         main.add(lateralQr, BorderLayout.EAST);
 
@@ -190,7 +190,7 @@ public class ImpresionTiqueteDialog extends JDialog {
             ImageIcon icon = new ImageIcon(img);
             qrLabel.setText(null);
             qrLabel.setIcon(icon);
-            qrLabel.setPreferredSize(new Dimension(icon.getIconWidth() + 16, icon.getIconHeight() + 16));
+            qrLabel.setPreferredSize(new Dimension(icon.getIconWidth() + 24, icon.getIconHeight() + 24));
             qrLabel.revalidate();
             return true;
         } catch (Exception ex) {

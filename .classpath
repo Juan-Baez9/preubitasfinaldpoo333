@@ -7,6 +7,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/juanj/Downloads/json-20240303.jar"/>
+	<classpathentry kind="lib" path="lib/core-3.5.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/javase-3.5.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/core-3.5.3.jar"/>
+	<classpathentry kind="lib" path="lib/javase-3.5.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

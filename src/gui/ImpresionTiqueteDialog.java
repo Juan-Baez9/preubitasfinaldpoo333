@@ -2,20 +2,23 @@ package gui;
 
 import manager.BoletaMasterSystem;
 import tiquetes.Tiquete;
-import gui.qr.QrCode;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+
 
 public class ImpresionTiqueteDialog extends JDialog {
 	
-	private static final int QR_ESCALA = 12;
-    private static final int QR_BORDE = 12;
+	private static final int QR_ESCALA = 10;
+    private static final int QR_BORDE = 5;
 
     private final Tiquete tiquete;
     private final BoletaMasterSystem sistema;
@@ -97,8 +100,8 @@ public class ImpresionTiqueteDialog extends JDialog {
         qrLabel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(247, 204, 64), 2),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-        qrLabel.setPreferredSize(new Dimension(420, 420));
-        qrLabel.setMinimumSize(new Dimension(360, 360));
+        qrLabel.setPreferredSize(new Dimension(320, 320));
+        qrLabel.setMinimumSize(new Dimension(260, 260));
         lateralQr.add(qrLabel, BorderLayout.CENTER);
         main.add(lateralQr, BorderLayout.EAST);
 
@@ -110,9 +113,7 @@ public class ImpresionTiqueteDialog extends JDialog {
         imprimirBtn.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
         add(imprimirBtn, BorderLayout.WEST);
 
-        if (tiquete.isImpreso()) {
-            mostrarQr(construirContenidoQr(fechaImpresion));
-        }
+        mostrarQr(construirContenidoQr(fechaImpresion));
     }
 
     private String construirTexto() {
@@ -151,54 +152,55 @@ public class ImpresionTiqueteDialog extends JDialog {
     }
 
     private String construirContenidoQr(LocalDateTime fecha) {
-        DateTimeFormatter fmtEvento = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter fmtImp = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        DateTimeFormatter fmtEvento = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter fmtImp = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+        String evento = tiquete.getEvento() != null
+                ? tiquete.getEvento().getNombre()
+                : "(sin evento)";
+
         String fechaEvento = tiquete.getEvento() != null && tiquete.getEvento().getFecha() != null
-        		  ? tiquete.getEvento().getFecha().format(fmtEvento) : "N/D";
-        String evento = tiquete.getEvento() != null ? tiquete.getEvento().getNombre() : "(sin evento)";
-        String query = String.format("evento=%s&id=%s&fechaEvento=%s&fechaExpedicion=%s",
-                URLEncoder.encode(evento, StandardCharsets.UTF_8),
-                URLEncoder.encode(String.valueOf(tiquete.getIdTiquete()), StandardCharsets.UTF_8),
-                URLEncoder.encode(fechaEvento, StandardCharsets.UTF_8),
-                URLEncoder.encode(fecha.format(fmtImp), StandardCharsets.UTF_8));
-        // El contenido se codifica como una URL completa para que la cámara del teléfono lo detecte
-        // inmediatamente como enlace. La propia URL incluye todos los datos del tiquete como parámetros
-        // de consulta legibles.
-        return "https://boletamaster.app/ticket?" + query;
+                ? tiquete.getEvento().getFecha().format(fmtEvento)
+                : "N/D";
+
+        String fechaImp = fecha.format(fmtImp);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Evento: ").append(evento).append("\n");
+        sb.append("ID:").append(tiquete.getIdTiquete()).append("\n");
+        sb.append("F.Evento:").append(fechaEvento).append("\n");
+        sb.append("F.Expedicion:").append(fechaImp);
+
+        return sb.toString();
     }
+
 
     private boolean mostrarQr(String contenido) {
         try {
-        	 QrCode qr = QrCode.encodeText(contenido, QrCode.Ecc.HIGH);
-             int tamano = (qr.size + QR_BORDE * 2) * QR_ESCALA;
-            BufferedImage img = new BufferedImage(tamano, tamano, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g = img.createGraphics();
-            
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-            g.setColor(Color.WHITE);
-            g.fillRect(0, 0, tamano, tamano);
-            g.setColor(Color.BLACK);
-            for (int y = 0; y < qr.size; y++) {
-                for (int x = 0; x < qr.size; x++) {
-                    if (qr.getModule(x, y)) {
-                    	g.fillRect((x + QR_BORDE) * QR_ESCALA, (y + QR_BORDE) * QR_ESCALA, QR_ESCALA, QR_ESCALA);
-                    }
-                }
-            }
-            g.dispose();
+            int size = 320; // tamaño en píxeles del QR
+
+            QRCodeWriter writer = new QRCodeWriter();
+            BitMatrix matrix = writer.encode(contenido, BarcodeFormat.QR_CODE, size, size);
+
+            // Convierte el BitMatrix a BufferedImage listo para poner en el JLabel
+            BufferedImage img = MatrixToImageWriter.toBufferedImage(matrix);
+
             ImageIcon icon = new ImageIcon(img);
             qrLabel.setText(null);
             qrLabel.setIcon(icon);
             qrLabel.setPreferredSize(new Dimension(icon.getIconWidth() + 24, icon.getIconHeight() + 24));
             qrLabel.revalidate();
+            qrLabel.repaint();
+
             return true;
-        } catch (Exception ex) {
+        } catch (WriterException e) {
             qrLabel.setText("QR no disponible");
             qrLabel.setIcon(null);
-            JOptionPane.showMessageDialog(this, "No se pudo generar el código QR: " + ex.getMessage(),
+            JOptionPane.showMessageDialog(this,
+                    "No se pudo generar el código QR: " + e.getMessage(),
                     "QR", JOptionPane.ERROR_MESSAGE);
             return false;
-        	}
-    	}
+        }
+    }
+
     }

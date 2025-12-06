@@ -415,8 +415,8 @@ public final class QrCode {
                 }
             }
             x -= 2;
-            direction = -direction;
             y += direction * (size - 1);
+            direction = -direction;
         }
     }
 

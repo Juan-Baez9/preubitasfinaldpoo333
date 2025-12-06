@@ -130,12 +130,13 @@ public class ImpresionTiqueteDialog extends JDialog {
         }
         fechaImpresion = LocalDateTime.now();
         tiquete.setFechaImpresion(fechaImpresion);
-        mostrarQr(construirContenidoQr(fechaImpresion));
-        sistema.marcarTiqueteImpreso(tiquete, fechaImpresion);
-        infoLabel.setText(construirTexto());
-        boton.setEnabled(false);
-        if (onPrinted != null) {
-            onPrinted.run();
+        if (mostrarQr(construirContenidoQr(fechaImpresion))) {
+            sistema.marcarTiqueteImpreso(tiquete, fechaImpresion);
+            infoLabel.setText(construirTexto());
+            boton.setEnabled(false);
+            if (onPrinted != null) {
+                onPrinted.run();
+            }
         }
     }
 
@@ -150,24 +151,34 @@ public class ImpresionTiqueteDialog extends JDialog {
         );
     }
 
-    private void mostrarQr(String contenido) {
-        QrCode qr = QrCode.encodeText(contenido, QrCode.Ecc.MEDIUM);
-        int escala = 6;
-        int borde = 4;
-        int tamano = (qr.size + borde * 2) * escala;
-        BufferedImage img = new BufferedImage(tamano, tamano, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = img.createGraphics();
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, tamano, tamano);
-        g.setColor(Color.BLACK);
-        for (int y = 0; y < qr.size; y++) {
-            for (int x = 0; x < qr.size; x++) {
-                if (qr.getModule(x, y)) {
-                    g.fillRect((x + borde) * escala, (y + borde) * escala, escala, escala);
+    private boolean mostrarQr(String contenido) {
+        try {
+            QrCode qr = QrCode.encodeText(contenido, QrCode.Ecc.MEDIUM);
+            int escala = 6;
+            int borde = 4;
+            int tamano = (qr.size + borde * 2) * escala;
+            BufferedImage img = new BufferedImage(tamano, tamano, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = img.createGraphics();
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, tamano, tamano);
+            g.setColor(Color.BLACK);
+            for (int y = 0; y < qr.size; y++) {
+                for (int x = 0; x < qr.size; x++) {
+                    if (qr.getModule(x, y)) {
+                        g.fillRect((x + borde) * escala, (y + borde) * escala, escala, escala);
+                    }
                 }
             }
-        }
-        g.dispose();
-        qrLabel.setIcon(new ImageIcon(img));
+            g.dispose();
+            qrLabel.setText(null);
+            qrLabel.setIcon(new ImageIcon(img));
+            return true;
+        } catch (Exception ex) {
+            qrLabel.setText("QR no disponible");
+            qrLabel.setIcon(null);
+            JOptionPane.showMessageDialog(this, "No se pudo generar el código QR: " + ex.getMessage(),
+                    "QR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        	}
+    	}
     }
-}

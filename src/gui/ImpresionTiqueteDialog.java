@@ -9,12 +9,12 @@ import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-
-
+import java.util.EnumMap;
+import java.util.Map;
 public class ImpresionTiqueteDialog extends JDialog {
 	
 	private static final int QR_ESCALA = 10;
@@ -178,12 +178,15 @@ public class ImpresionTiqueteDialog extends JDialog {
     private boolean mostrarQr(String contenido) {
         try {
             int size = 320; // tamaño en píxeles del QR
+            
+            Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+            hints.put(EncodeHintType.MARGIN, 1);
 
             QRCodeWriter writer = new QRCodeWriter();
-            BitMatrix matrix = writer.encode(contenido, BarcodeFormat.QR_CODE, size, size);
+            BitMatrix matrix = writer.encode(contenido, BarcodeFormat.QR_CODE, size, size, hints);
 
-            // Convierte el BitMatrix a BufferedImage listo para poner en el JLabel
-            BufferedImage img = MatrixToImageWriter.toBufferedImage(matrix);
+            BufferedImage img = convertirABufferedImage(matrix);
 
             ImageIcon icon = new ImageIcon(img);
             qrLabel.setText(null);
@@ -201,6 +204,32 @@ public class ImpresionTiqueteDialog extends JDialog {
                     "QR", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+    }
+
+    private BufferedImage convertirABufferedImage(BitMatrix matrix) {
+        int qrWidth = matrix.getWidth();
+        int qrHeight = matrix.getHeight();
+        int renderWidth = qrWidth * QR_ESCALA + (QR_BORDE * 2);
+        int renderHeight = qrHeight * QR_ESCALA + (QR_BORDE * 2);
+
+        BufferedImage image = new BufferedImage(renderWidth, renderHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = image.createGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, renderWidth, renderHeight);
+        g.setColor(Color.BLACK);
+
+        for (int x = 0; x < qrWidth; x++) {
+            for (int y = 0; y < qrHeight; y++) {
+                if (matrix.get(x, y)) {
+                    int px = (x * QR_ESCALA) + QR_BORDE;
+                    int py = (y * QR_ESCALA) + QR_BORDE;
+                    g.fillRect(px, py, QR_ESCALA, QR_ESCALA);
+                }
+            }
+        }
+
+        g.dispose();
+        return image;
     }
 
     }

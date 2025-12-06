@@ -112,27 +112,43 @@ public class BoletaMasterGUI extends JFrame {
         gbc.gridx = 1;
         tarjeta.add(passField, gbc);
 
-        gbc.gridy = 3; gbc.gridx = 0;
-        tarjeta.add(new JLabel("Rol"), gbc);
-        JComboBox<String> rolCombo = new JComboBox<>(new String[]{"Cliente", "Organizador", "Administrador"});
-        gbc.gridx = 1;
-        tarjeta.add(rolCombo, gbc);
+        gbc.gridy = 3; gbc.gridx = 0; gbc.gridwidth = 2;
+        tarjeta.add(new JLabel("Ingresar como"), gbc);
 
-        JButton ingresar = new JButton("Ingresar");
-        ingresar.addActionListener(e -> {
+        JPanel botonesRol = new JPanel(new GridLayout(1, 3, 8, 8));
+        botonesRol.setOpaque(false);
+
+        JButton ingresarCliente = new JButton("Cliente");
+        ingresarCliente.addActionListener(e -> {
             String login = usuarioField.getText().trim();
             String pass = new String(passField.getPassword());
-            String rol = rolCombo.getSelectedItem().toString();
             credencialLogin = login;
             credencialPassword = pass;
-            switch (rol) {
-                case "Cliente" -> manejarIngresoCliente(login, pass);
-                case "Organizador" -> manejarIngresoOrganizador(login, pass);
-                case "Administrador" -> manejarIngresoAdministrador(login, pass);
-            }
+            manejarIngresoCliente(login, pass);
         });
+        botonesRol.add(ingresarCliente);
+
+        JButton ingresarOrganizador = new JButton("Organizador");
+        ingresarOrganizador.addActionListener(e -> {
+            String login = usuarioField.getText().trim();
+            String pass = new String(passField.getPassword());
+            credencialLogin = login;
+            credencialPassword = pass;
+            manejarIngresoOrganizador(login, pass);
+        });
+        botonesRol.add(ingresarOrganizador);
+
+        JButton ingresarAdmin = new JButton("Administrador");
+        ingresarAdmin.addActionListener(e -> {
+            String login = usuarioField.getText().trim();
+            String pass = new String(passField.getPassword());
+            credencialLogin = login;
+            credencialPassword = pass;
+            manejarIngresoAdministrador(login, pass);
+        });
+        botonesRol.add(ingresarAdmin);
         gbc.gridy = 4; gbc.gridx = 0; gbc.gridwidth = 2;
-        tarjeta.add(ingresar, gbc);
+        tarjeta.add(botonesRol, gbc);
 
         panel.add(tarjeta, BorderLayout.CENTER);
         return panel;
@@ -529,39 +545,71 @@ public class BoletaMasterGUI extends JFrame {
         dialog.setVisible(true);
     }
     private void manejarIngresoCliente(String login, String pass) {
+    	 if (intentarIngresoCliente(login, pass)) {
+             return;
+         }
+         if (intentarIngresoOrganizador(login, pass)) {
+             return;
+         }
+         if (intentarIngresoAdministrador(login, pass)) {
+             return;
+         }
+         JOptionPane.showMessageDialog(this, "Credenciales inválidas", "Error", JOptionPane.ERROR_MESSAGE);
+     }
+
+     private void manejarIngresoOrganizador(String login, String pass) {
+         if (intentarIngresoOrganizador(login, pass)) {
+             return;
+         }
+         JOptionPane.showMessageDialog(this, "Credenciales inválidas", "Error", JOptionPane.ERROR_MESSAGE);
+     }
+
+     private void manejarIngresoAdministrador(String login, String pass) {
+         if (intentarIngresoAdministrador(login, pass)) {
+             return;
+         }
+         JOptionPane.showMessageDialog(this, "Credenciales inválidas", "Error", JOptionPane.ERROR_MESSAGE);
+     }
+
+     private boolean intentarIngresoCliente(String login, String pass) {
         clienteActual = sistema.autenticarCliente(login, pass).orElse(null);
-        adminActual = null;
-        organizadorActual = null;
+        
         if (clienteActual == null) {
-            JOptionPane.showMessageDialog(this, "Credenciales inválidas", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            refrescarDatosCliente();
-            cardLayout.show(content, "cliente");
-        }
+        	return false;
     }
+        adminActual = null;
+        organizadorActual = null;
+        refrescarDatosCliente();
+        cardLayout.show(content, "cliente");
+        return true;
+     }
 
-    private void manejarIngresoOrganizador(String login, String pass) {
+        private boolean intentarIngresoOrganizador(String login, String pass) {
         organizadorActual = sistema.autenticarOrganizador(login, pass).orElse(null);
+        
+        if (organizadorActual == null) {
+        	return false;
+    }
         clienteActual = null;
         adminActual = null;
-        if (organizadorActual == null) {
-            JOptionPane.showMessageDialog(this, "Credenciales inválidas", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            refrescarDatosOrganizador();
-            cardLayout.show(content, "organizador");
+        refrescarDatosOrganizador();
+        cardLayout.show(content, "organizador");
+        return true;
+        
         }
-    }
 
-    private void manejarIngresoAdministrador(String login, String pass) {
+        private boolean intentarIngresoAdministrador(String login, String pass) {
         adminActual = sistema.autenticarAdministrador(login, pass).orElse(null);
+        
+        if (adminActual == null) {
+            return false;
+
+        }
         clienteActual = null;
         organizadorActual = null;
-        if (adminActual == null) {
-            JOptionPane.showMessageDialog(this, "Credenciales inválidas", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            refrescarDatosAdministrador();
-            cardLayout.show(content, "admin");
-        }
+        refrescarDatosAdministrador();
+        cardLayout.show(content, "admin");
+        return true;
     }
 
     private void cerrarSesion() {

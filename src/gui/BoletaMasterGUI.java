@@ -1,6 +1,8 @@
 package gui;
 
 import Cliente.Cliente;
+import Cliente.Organizador;
+import Cliente.Administrador;
 import manager.BoletaMasterSystem;
 import marketPlace.ContraOferta;
 import marketPlace.OfertaMarketPlace;
@@ -19,6 +21,11 @@ public class BoletaMasterGUI extends JFrame {
 
     private final BoletaMasterSystem sistema;
     private Cliente clienteActual;
+    private Organizador organizadorActual;
+    private Administrador adminActual;
+    private String credencialLogin;
+    private String credencialPassword;
+
 
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel content = new JPanel(cardLayout);
@@ -33,6 +40,12 @@ public class BoletaMasterGUI extends JFrame {
     private JTextField valorContraOfertaField;
     private JTextField valorNuevaOfertaField;
     private JList<Tiquete> listaPublicables;
+    private DefaultListModel<OfertaMarketPlace> ofertasAdminModel;
+    private JTextArea logArea;
+
+    private DefaultListModel<eventos.Evento> eventosOrganizadorModel;
+    private JLabel finanzasOrganizador;
+
 
     public BoletaMasterGUI() {
         super("BoletaMaster - Plataforma gráfica");
@@ -56,6 +69,8 @@ public class BoletaMasterGUI extends JFrame {
         add(content, BorderLayout.CENTER);
         content.add(crearPanelLogin(), "login");
         content.add(crearPanelCliente(), "cliente");
+        content.add(crearPanelOrganizador(), "organizador");
+        content.add(crearPanelAdministrador(), "admin");
         cardLayout.show(content, "login");
     }
 
@@ -97,19 +112,26 @@ public class BoletaMasterGUI extends JFrame {
         gbc.gridx = 1;
         tarjeta.add(passField, gbc);
 
-        JButton ingresar = new JButton("Ingresar como cliente");
+        gbc.gridy = 3; gbc.gridx = 0;
+        tarjeta.add(new JLabel("Rol"), gbc);
+        JComboBox<String> rolCombo = new JComboBox<>(new String[]{"Cliente", "Organizador", "Administrador"});
+        gbc.gridx = 1;
+        tarjeta.add(rolCombo, gbc);
+
+        JButton ingresar = new JButton("Ingresar");
         ingresar.addActionListener(e -> {
             String login = usuarioField.getText().trim();
             String pass = new String(passField.getPassword());
-            clienteActual = sistema.autenticarCliente(login, pass).orElse(null);
-            if (clienteActual == null) {
-                JOptionPane.showMessageDialog(this, "Credenciales inválidas", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                refrescarDatosCliente();
-                cardLayout.show(content, "cliente");
+            String rol = rolCombo.getSelectedItem().toString();
+            credencialLogin = login;
+            credencialPassword = pass;
+            switch (rol) {
+                case "Cliente" -> manejarIngresoCliente(login, pass);
+                case "Organizador" -> manejarIngresoOrganizador(login, pass);
+                case "Administrador" -> manejarIngresoAdministrador(login, pass);
             }
         });
-        gbc.gridy = 3; gbc.gridx = 0; gbc.gridwidth = 2;
+        gbc.gridy = 4; gbc.gridx = 0; gbc.gridwidth = 2;
         tarjeta.add(ingresar, gbc);
 
         panel.add(tarjeta, BorderLayout.CENTER);
@@ -120,9 +142,15 @@ public class BoletaMasterGUI extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.setBackground(new Color(236, 242, 250));
+        JPanel encabezado = new JPanel(new BorderLayout());
+        encabezado.setOpaque(false);
         JLabel titulo = new JLabel("Panel de cliente", SwingConstants.LEFT);
         titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 18f));
-        panel.add(titulo, BorderLayout.NORTH);
+        encabezado.add(titulo, BorderLayout.WEST);
+        JButton salir = new JButton("Cerrar sesión");
+        salir.addActionListener(e -> cerrarSesion());
+        encabezado.add(salir, BorderLayout.EAST);
+        panel.add(encabezado, BorderLayout.NORTH);
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Mis tiquetes", crearTabTiquetes());
@@ -132,6 +160,81 @@ public class BoletaMasterGUI extends JFrame {
         panel.add(tabs, BorderLayout.CENTER);
         return panel;
     }
+    private JPanel crearPanelOrganizador() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.setBackground(new Color(236, 242, 250));
+
+        JPanel encabezado = new JPanel(new BorderLayout());
+        encabezado.setOpaque(false);
+        JLabel titulo = new JLabel("Panel de organizador", SwingConstants.LEFT);
+        titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 18f));
+        finanzasOrganizador = new JLabel();
+        encabezado.add(titulo, BorderLayout.WEST);
+        encabezado.add(finanzasOrganizador, BorderLayout.CENTER);
+        JButton salir = new JButton("Cerrar sesión");
+        salir.addActionListener(e -> cerrarSesion());
+        encabezado.add(salir, BorderLayout.EAST);
+        panel.add(encabezado, BorderLayout.NORTH);
+
+        eventosOrganizadorModel = new DefaultListModel<>();
+        JList<eventos.Evento> listaEventos = new JList<>(eventosOrganizadorModel);
+        listaEventos.setCellRenderer((l, v, i, s, f) -> {
+            String fecha = v.getFecha() != null ? v.getFecha().toString() : "(sin fecha)";
+            JLabel lbl = new JLabel(v.getNombre() + " - " + fecha);
+            if (s) { lbl.setOpaque(true); lbl.setBackground(new Color(220, 235, 255)); }
+            return lbl;
+        });
+        panel.add(new JScrollPane(listaEventos), BorderLayout.CENTER);
+        return panel;
+    }
+
+    private JPanel crearPanelAdministrador() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.setBackground(new Color(236, 242, 250));
+
+        JPanel encabezado = new JPanel(new BorderLayout());
+        encabezado.setOpaque(false);
+        JLabel titulo = new JLabel("Panel de administrador", SwingConstants.LEFT);
+        titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 18f));
+        encabezado.add(titulo, BorderLayout.WEST);
+        JButton salir = new JButton("Cerrar sesión");
+        salir.addActionListener(e -> cerrarSesion());
+        encabezado.add(salir, BorderLayout.EAST);
+        panel.add(encabezado, BorderLayout.NORTH);
+
+        JPanel centro = new JPanel(new GridLayout(1, 2, 10, 10));
+        ofertasAdminModel = new DefaultListModel<>();
+        JList<OfertaMarketPlace> listaOfertas = new JList<>(ofertasAdminModel);
+        listaOfertas.setCellRenderer((l, v, i, s, f) -> new JLabel(v.getId() + " - $" + v.getPrecioInicial() + " (" + v.getEstado() + ")"));
+
+        JPanel acciones = new JPanel(new BorderLayout());
+        JButton cancelar = new JButton("Cancelar oferta seleccionada");
+        cancelar.addActionListener(e -> {
+            OfertaMarketPlace seleccion = listaOfertas.getSelectedValue();
+            if (seleccion == null) return;
+            try {
+                sistema.cancelarOfertaPorAdministrador(adminActual, seleccion.getId());
+                refrescarDatosAdministrador();
+                JOptionPane.showMessageDialog(this, "Oferta cancelada", "Administrador", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        acciones.add(cancelar, BorderLayout.SOUTH);
+        centro.add(new JScrollPane(listaOfertas));
+        centro.add(acciones);
+        panel.add(centro, BorderLayout.CENTER);
+
+        logArea = new JTextArea();
+        logArea.setEditable(false);
+        logArea.setLineWrap(true);
+        logArea.setWrapStyleWord(true);
+        panel.add(new JScrollPane(logArea), BorderLayout.SOUTH);
+        return panel;
+    }
+
 
     private JPanel crearTabTiquetes() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
@@ -356,6 +459,39 @@ public class BoletaMasterGUI extends JFrame {
             }
         }
     }
+    private void refrescarDatosOrganizador() {
+        if (organizadorActual == null) return;
+        eventosOrganizadorModel.clear();
+        for (eventos.Evento e : sistema.getEventosOrganizador(organizadorActual)) {
+            eventosOrganizadorModel.addElement(e);
+        }
+        try {
+            double finanzas = organizadorActual.consultarFinanzas(credencialLogin, credencialPassword);
+            finanzasOrganizador.setText("Finanzas: $" + String.format("%.2f", finanzas));
+        } catch (Exception ex) {
+            finanzasOrganizador.setText("Finanzas no disponibles");
+        }
+    }
+
+    private void refrescarDatosAdministrador() {
+        if (adminActual == null) return;
+        ofertasAdminModel.clear();
+        for (OfertaMarketPlace o : sistema.obtenerTodasLasOfertas()) {
+            ofertasAdminModel.addElement(o);
+        }
+        try {
+            List<log.EntradaLog> entradas = sistema.getLogSistema().consultar(adminActual, credencialLogin, credencialPassword);
+            StringBuilder sb = new StringBuilder();
+            for (log.EntradaLog entrada : entradas) {
+                sb.append(entrada.getFechaHora()).append(" - ")
+                        .append(entrada.getTipo()).append(": ")
+                        .append(entrada.getDescripcion()).append("\n");
+            }
+            logArea.setText(sb.toString());
+        } catch (Exception ex) {
+            logArea.setText("No se pudo cargar el log: " + ex.getMessage());
+        }
+    }
 
     private void actualizarPublicables() {
         DefaultListModel<Tiquete> model = (DefaultListModel<Tiquete>) listaPublicables.getModel();
@@ -392,6 +528,51 @@ public class BoletaMasterGUI extends JFrame {
         });
         dialog.setVisible(true);
     }
+    private void manejarIngresoCliente(String login, String pass) {
+        clienteActual = sistema.autenticarCliente(login, pass).orElse(null);
+        adminActual = null;
+        organizadorActual = null;
+        if (clienteActual == null) {
+            JOptionPane.showMessageDialog(this, "Credenciales inválidas", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            refrescarDatosCliente();
+            cardLayout.show(content, "cliente");
+        }
+    }
+
+    private void manejarIngresoOrganizador(String login, String pass) {
+        organizadorActual = sistema.autenticarOrganizador(login, pass).orElse(null);
+        clienteActual = null;
+        adminActual = null;
+        if (organizadorActual == null) {
+            JOptionPane.showMessageDialog(this, "Credenciales inválidas", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            refrescarDatosOrganizador();
+            cardLayout.show(content, "organizador");
+        }
+    }
+
+    private void manejarIngresoAdministrador(String login, String pass) {
+        adminActual = sistema.autenticarAdministrador(login, pass).orElse(null);
+        clienteActual = null;
+        organizadorActual = null;
+        if (adminActual == null) {
+            JOptionPane.showMessageDialog(this, "Credenciales inválidas", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            refrescarDatosAdministrador();
+            cardLayout.show(content, "admin");
+        }
+    }
+
+    private void cerrarSesion() {
+        clienteActual = null;
+        organizadorActual = null;
+        adminActual = null;
+        credencialLogin = null;
+        credencialPassword = null;
+        cardLayout.show(content, "login");
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
